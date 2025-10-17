@@ -1,27 +1,26 @@
 <?php
 /**
- * phpDocGenerator v0.4.2
+ * phpDocGenerator v0.4.3
  * PHP Documentation Output Creator
- * Generuje HTML dokumentáciu z PHP súborov
+ * Generates HTML documentation from PHP files
  */
 
 // ============================================================================
-// KONFIGURÁCIA - upravte podľa potreby
+// CONFIGURATION - adjust as needed
 // ============================================================================
 
 $settings = [
-    // Adresáre na analyzovanie (budú sa prechádzať rekurzívne)
+    // Directories to scan (will be traversed recursively)
     'directories' => [
-        '../../../ci4cms/app/Controllers',
-        '../../../ci4cms/app/Models',
-        '../../../ci4cms/app/Helpers',
-        '../../../ci4cms/app/Views',
+        '../app/Controllers',
+        '../app/Models',
+        '../app/Views',
     ],
 
-    // Výstupný adresár pre dokumentáciu (relatívne k generator.php)
+    // Output directory for documentation (relative to generator.php)
     'output_dir' => 'output',
 
-    // Adresáre, ktoré sa majú preskočiť (napr. vendor, cache)
+    // Directories to skip (e.g. vendor, cache)
     'exclude_dirs' => [
         'vendor',
         'cache',
@@ -30,20 +29,20 @@ $settings = [
         'node_modules',
     ],
 
-    // HTTP autentifikácia - môžete pridať viacero userov
-    // Nechajte prázdne pole pre verejný prístup
+    // HTTP authentication - add multiple users
+    // Leave empty array for public access
     'http_auth' => [
-        // Formát: 'username' => 'password'
-        // 'admin' => 'heslo123',
-         'user' => '1234',
+        // Format: 'username' => 'password'
+        // 'admin' => 'password123',
+        // 'user' => 'pass456',
     ],
 
-    // Aktívny jazyk (sk, en, de)
-    'language' => 'sk',
+    // Active language (sk, en, de)
+    'language' => 'en',
 ];
 
 // ============================================================================
-// JAZYKOVÉ PREKLADY
+// LANGUAGE TRANSLATIONS
 // ============================================================================
 
 $translations = [
@@ -55,7 +54,7 @@ $translations = [
         'project_structure' => 'Štruktúra projektu',
         'parameters' => 'Parametre',
         'return' => 'return',
-        'search_placeholder' => '🔍 Hľadať funkcie...',
+        'search_placeholder' => '🔎 Hľadať funkcie...',
         'class' => 'class',
         'function' => 'function',
         'protected_area' => 'Chránená oblasť',
@@ -71,7 +70,7 @@ $translations = [
         'project_structure' => 'Project Structure',
         'parameters' => 'Parameters',
         'return' => 'return',
-        'search_placeholder' => '🔍 Search functions...',
+        'search_placeholder' => '🔎 Search functions...',
         'class' => 'class',
         'function' => 'function',
         'protected_area' => 'Protected Area',
@@ -87,7 +86,7 @@ $translations = [
         'project_structure' => 'Projektstruktur',
         'parameters' => 'Parameter',
         'return' => 'return',
-        'search_placeholder' => '🔍 Funktionen suchen...',
+        'search_placeholder' => '🔎 Funktionen suchen...',
         'class' => 'class',
         'function' => 'function',
         'protected_area' => 'Geschützter Bereich',
@@ -98,48 +97,53 @@ $translations = [
 ];
 
 // ============================================================================
-// GENERÁTOR DOKUMENTÁCIE - neupravujte nižšie, pokiaľ neviete čo robíte
+// DOCUMENTATION GENERATOR - do not edit below unless you know what you're doing
 // ============================================================================
 
 class phpDocGenerator {
-    const VERSION = '0.4.2';
+    const VERSION = '0.4.3';
 
-    private array $settings;
-    private array $files;
-    private array $documentation;
-    private array $allClasses;
-    private array $allFunctions;
-    private array $fileTree;
-    private ?string $baseDir;
-    private array $lang;
+    private $settings = [];
+    private $files = [];
+    private $documentation = [];
+    private $allClasses = [];
+    private $allFunctions = [];
+    private $fileTree = [];
+    private $baseDir = null;
+    private $lang = [];
+    private $isCLI = false;
 
-    public function __construct(array $settings, array $translations) {
+    public function __construct($settings, $translations) {
         $this->settings = $settings;
-        $this->files = [];
-        $this->documentation = [];
-        $this->allClasses = [];
-        $this->allFunctions = [];
-        $this->fileTree = [];
-        $this->baseDir = null;
         $this->lang = $translations[$settings['language']] ?? $translations['en'];
+        $this->isCLI = php_sapi_name() === 'cli';
         $this->validateSettings();
     }
 
-    private function validateSettings(): void {
+    /**
+     * Output message with proper line break based on environment
+     */
+    private function output($message) {
+        if ($this->isCLI) {
+            echo $message . "\n";
+        } else {
+            echo htmlspecialchars($message) . "<br>\n";
+        }
+    }
+
+    private function validateSettings() {
         if (empty($this->settings['directories'])) {
-            die("❌ V settings chýba 'directories'!\n");
+            $this->output("❌ Missing 'directories' in settings!");
+            exit(1);
         }
         if (empty($this->settings['output_dir'])) {
             $this->settings['output_dir'] = 'output';
         }
     }
 
-    public function generate(): void {
-        echo "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-rocket-takeoff' viewBox='0 0 16 16'>
-  <path d='M9.752 6.193c.599.6 1.73.437 2.528-.362s.96-1.932.362-2.531c-.599-.6-1.73-.438-2.528.361-.798.8-.96 1.933-.362 2.532'/>
-  <path d='M15.811 3.312c-.363 1.534-1.334 3.626-3.64 6.218l-.24 2.408a2.56 2.56 0 0 1-.732 1.526L8.817 15.85a.51.51 0 0 1-.867-.434l.27-1.899c.04-.28-.013-.593-.131-.956a9 9 0 0 0-.249-.657l-.082-.202c-.815-.197-1.578-.662-2.191-1.277-.614-.615-1.079-1.379-1.275-2.195l-.203-.083a10 10 0 0 0-.655-.248c-.363-.119-.675-.172-.955-.132l-1.896.27A.51.51 0 0 1 .15 7.17l2.382-2.386c.41-.41.947-.67 1.524-.734h.006l2.4-.238C9.005 1.55 11.087.582 12.623.208c.89-.217 1.59-.232 2.08-.188.244.023.435.06.57.093q.1.026.16.045c.184.06.279.13.351.295l.029.073a3.5 3.5 0 0 1 .157.721c.055.485.051 1.178-.159 2.065m-4.828 7.475.04-.04-.107 1.081a1.54 1.54 0 0 1-.44.913l-1.298 1.3.054-.38c.072-.506-.034-.993-.172-1.418a9 9 0 0 0-.164-.45c.738-.065 1.462-.38 2.087-1.006M5.205 5c-.625.626-.94 1.351-1.004 2.09a9 9 0 0 0-.45-.164c-.424-.138-.91-.244-1.416-.172l-.38.054 1.3-1.3c.245-.246.566-.401.91-.44l1.08-.107zm9.406-3.961c-.38-.034-.967-.027-1.746.163-1.558.38-3.917 1.496-6.937 4.521-.62.62-.799 1.34-.687 2.051.107.676.483 1.362 1.048 1.928.564.565 1.25.941 1.924 1.049.71.112 1.429-.067 2.048-.688 3.079-3.083 4.192-5.444 4.556-6.987.183-.771.18-1.345.138-1.713a3 3 0 0 0-.045-.283 3 3 0 0 0-.3-.041Z'/>
-  <path d='M7.009 12.139a7.6 7.6 0 0 1-1.804-1.352A7.6 7.6 0 0 1 3.794 8.86c-1.102.992-1.965 5.054-1.839 5.18.125.126 3.936-.896 5.054-1.902Z'/>
-</svg> Spúšťam phpDocGenerator v" . self::VERSION . "...\n\n";
+    public function generate() {
+        $this->output("🚀 Starting phpDocGenerator v" . self::VERSION . "...");
+        $this->output("");
 
         $this->scanDirectories();
         $this->baseDir = $this->findCommonBasePath();
@@ -151,22 +155,24 @@ class phpDocGenerator {
         $this->generateMainIndex();
         $this->createHtaccess();
 
-        echo "\n✅ Hotovo! Otvorte {$this->settings['output_dir']}/index.html v prehliadači.\n";
+        $this->output("");
+        $this->output("✅ Done! Open {$this->settings['output_dir']}/index.html in your browser.");
     }
 
-    private function scanDirectories(): void {
-        echo "📂 Skenujem adresáre...\n";
+    private function scanDirectories() {
+        $this->output("📂 Scanning directories...");
         foreach ($this->settings['directories'] as $dir) {
             if (!is_dir($dir)) {
-                echo "⚠️  Adresár neexistuje: $dir\n";
+                $this->output("⚠️  Directory does not exist: $dir");
                 continue;
             }
             $this->scanDirectory($dir);
         }
-        echo "   Nájdených " . count($this->files) . " PHP súborov\n\n";
+        $this->output("   Found " . count($this->files) . " PHP files");
+        $this->output("");
     }
 
-    private function scanDirectory(string $dir): void {
+    private function scanDirectory($dir) {
         $items = scandir($dir);
         foreach ($items as $item) {
             if ($item === '.' || $item === '..') continue;
@@ -192,7 +198,7 @@ class phpDocGenerator {
         }
     }
 
-    private function findCommonBasePath(): string {
+    private function findCommonBasePath() {
         $paths = [];
         foreach ($this->settings['directories'] as $dir) {
             $realPath = realpath($dir);
@@ -215,14 +221,14 @@ class phpDocGenerator {
         return $commonPath;
     }
 
-    private function parseFiles(): void {
-        echo "🔍 Analyzujem PHP súbory...\n";
+    private function parseFiles() {
+        $this->output("🔍 Analyzing PHP files...");
         foreach ($this->files as $file) {
             $this->documentation[$file] = $this->parseFile($file);
         }
     }
 
-    private function parseFile(string $file): array {
+    private function parseFile($file) {
         $content = file_get_contents($file);
         $tokens = token_get_all($content);
 
@@ -288,7 +294,7 @@ class phpDocGenerator {
         return $doc;
     }
 
-    private function parseDocBlock(string $comment): array {
+    private function parseDocBlock($comment) {
         $lines = explode("\n", $comment);
         $parsed = [
             'description' => '',
@@ -320,7 +326,7 @@ class phpDocGenerator {
         return $parsed;
     }
 
-    private function getNextToken(array $tokens, int $startIndex, int $type): string {
+    private function getNextToken($tokens, $startIndex, $type) {
         for ($i = $startIndex + 1; $i < count($tokens); $i++) {
             if (is_array($tokens[$i]) && $tokens[$i][0] === $type) {
                 return $tokens[$i][1];
@@ -329,7 +335,7 @@ class phpDocGenerator {
         return '';
     }
 
-    private function extractParameters(array $tokens, int $startIndex): array {
+    private function extractParameters($tokens, $startIndex) {
         $params = [];
         $inParams = false;
         $currentParam = '';
@@ -358,8 +364,8 @@ class phpDocGenerator {
         return $params;
     }
 
-    private function buildFileTree(): void {
-        echo "🌳 Vytvárам stromovú štruktúru...\n";
+    private function buildFileTree() {
+        $this->output("🌳 Building tree structure...");
 
         foreach ($this->files as $file) {
             $relativePath = $this->getRelativePath($file);
@@ -389,7 +395,7 @@ class phpDocGenerator {
         }
     }
 
-    private function fileExistsInTree(string $relativePath): bool {
+    private function fileExistsInTree($relativePath) {
         $parts = explode('/', $relativePath);
         $current = $this->fileTree;
 
@@ -407,7 +413,7 @@ class phpDocGenerator {
         return false;
     }
 
-    private function getRelativePath(string $file): string {
+    private function getRelativePath($file) {
         $file = realpath($file);
 
         if ($this->baseDir && $file && strpos($file, $this->baseDir) === 0) {
@@ -417,8 +423,8 @@ class phpDocGenerator {
         return basename($file);
     }
 
-    private function createOutputStructure(): void {
-        echo "📁 Vytvárам štruktúru adresárov...\n";
+    private function createOutputStructure() {
+        $this->output("📁 Creating directory structure...");
 
         if (!file_exists($this->settings['output_dir'])) {
             mkdir($this->settings['output_dir'], 0755, true);
@@ -434,8 +440,8 @@ class phpDocGenerator {
         }
     }
 
-    private function generateHTMLFiles(): void {
-        echo "📄 Generujem HTML súbory...\n";
+    private function generateHTMLFiles() {
+        $this->output("📄 Generating HTML files...");
 
         foreach ($this->documentation as $file => $doc) {
             $relativePath = $this->getRelativePath($file);
@@ -446,7 +452,7 @@ class phpDocGenerator {
         }
     }
 
-    private function generateFileHTML(string $file, array $doc, string $relativePath): string {
+    private function generateFileHTML($file, $doc, $relativePath) {
         $depth = substr_count($relativePath, '/');
         $rootPath = $depth > 0 ? str_repeat('../', $depth) : '';
 
@@ -457,7 +463,7 @@ class phpDocGenerator {
         return $this->getHTMLTemplate(basename($file), $header . $breadcrumb . $content, 'file');
     }
 
-    private function generateBreadcrumb(string $path, string $rootPath = ''): string {
+    private function generateBreadcrumb($path, $rootPath = '') {
         $parts = explode('/', $path);
         $breadcrumb = '<div class="breadcrumb">';
         $breadcrumb .= '<a href="' . $rootPath . 'index.html">' . $this->lang['home'] . '</a>';
@@ -465,8 +471,10 @@ class phpDocGenerator {
         $currentPath = '';
         foreach ($parts as $index => $part) {
             if ($index === count($parts) - 1) {
+                // Last part - current file
                 $breadcrumb .= ' <span class="separator">›</span> <span class="current">' . htmlspecialchars($part) . '</span>';
             } else {
+                // Directory
                 $currentPath .= ($currentPath ? '/' : '') . $part;
                 $breadcrumb .= ' <span class="separator">›</span> <a href="' . $rootPath . $currentPath . '/index.html">' . htmlspecialchars($part) . '</a>';
             }
@@ -476,7 +484,7 @@ class phpDocGenerator {
         return $breadcrumb;
     }
 
-    private function generateHeader(string $rootPath = ''): string {
+    private function generateHeader($rootPath = '') {
         $html = "<div class='header-main'>\n";
         $html .= "<div class='logo'>\n";
         $html .= "<a href='{$rootPath}index.html'><img src='https://contentigniter.kukis.sk/phpDoc/phpdoc-app-logo.png' alt='phpDOC'></a>\n";
@@ -492,7 +500,7 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function generateFileContent(string $file, array $doc): string {
+    private function generateFileContent($file, $doc) {
         $html = "<div class='file-header'>\n";
         $html .= "<h1>" . $this->getFileIcon() . " " . htmlspecialchars(basename($file)) . "</h1>\n";
         $html .= "<div class='file-path'>" . htmlspecialchars($file) . "</div>\n";
@@ -524,7 +532,7 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function generateMethodHTML(array $method, int $index): string {
+    private function generateMethodHTML($method, $index) {
         $id = 'method-' . $index;
         $params = !empty($method['parameters']) ? '(' . htmlspecialchars(implode(', ', $method['parameters'])) . ')' : '()';
 
@@ -564,7 +572,7 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function generateFunctionHTML(array $function, int $index): string {
+    private function generateFunctionHTML($function, $index) {
         $id = 'func-' . $index;
         $params = !empty($function['parameters']) ? '(' . htmlspecialchars(implode(', ', $function['parameters'])) . ')' : '()';
 
@@ -587,12 +595,12 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function generateDirectoryIndexes(): void {
-        echo "📂 Generujem indexy adresárov...\n";
+    private function generateDirectoryIndexes() {
+        $this->output("📂 Generating directory indexes...");
         $this->generateDirIndex($this->fileTree, '');
     }
 
-    private function generateDirIndex(array $tree, string $path): void {
+    private function generateDirIndex($tree, $path) {
         if (!empty($tree['dirs'])) {
             foreach ($tree['dirs'] as $dirName => $subTree) {
                 $dirPath = $path ? $path . '/' . $dirName : $dirName;
@@ -614,7 +622,7 @@ class phpDocGenerator {
         }
     }
 
-    private function generateTreeHTML(array $tree): string {
+    private function generateTreeHTML($tree) {
         $html = "<div class='tree'>\n";
 
         if (!empty($tree['dirs'])) {
@@ -639,8 +647,8 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function generateMainIndex(): void {
-        echo "🏠 Generujem hlavný index.html...\n";
+    private function generateMainIndex() {
+        $this->output("🏠 Generating main index.html...");
 
         $header = $this->generateHeader('');
 
@@ -653,7 +661,7 @@ class phpDocGenerator {
         file_put_contents($this->settings['output_dir'] . '/index.html', $html);
     }
 
-    private function generateFullTreeHTML(array $tree, string $path): string {
+    private function generateFullTreeHTML($tree, $path) {
         $html = "<div class='tree'>\n";
 
         if (!empty($tree['dirs'])) {
@@ -681,16 +689,16 @@ class phpDocGenerator {
         return $html;
     }
 
-    private function getFolderIcon(): string {
+    private function getFolderIcon() {
         return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19z"/></svg>';
     }
 
-    private function getFileIcon(): string {
+    private function getFileIcon() {
         return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/><path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"/></svg>';
     }
 
-    private function createHtaccess(): void {
-        echo "🔒 Vytvárам .htaccess...\n";
+    private function createHtaccess() {
+        $this->output("🔒 Creating .htaccess...");
 
         $htaccess = '';
 
@@ -704,49 +712,49 @@ class phpDocGenerator {
             $htpasswdPath = realpath($this->settings['output_dir'] . '/.htpasswd');
 
             $htaccess = <<<HTACCESS
-# HTTP Autentifikácia
+# HTTP Authentication
 AuthType Basic
 AuthName "phpDocGenerator - {$this->lang['protected_area']}"
 AuthUserFile {$htpasswdPath}
 Require valid-user
 
-# Povoliť HTML a assets aj pre autentifikovaných
+# Allow HTML and assets for authenticated users
 <FilesMatch "\\.(html|css|js|png|jpg|gif|svg)$">
     Satisfy Any
 </FilesMatch>
 
 
 HTACCESS;
-            echo "   ✓ {$this->lang['auth_enabled']}\n";
-            echo "   {$this->lang['users']}:\n";
+            $this->output("   ✓ {$this->lang['auth_enabled']}");
+            $this->output("   {$this->lang['users']}:");
             foreach ($this->settings['http_auth'] as $username => $password) {
-                echo "     - {$username}\n";
+                $this->output("     - {$username}");
             }
         } else {
-            echo "   ⚠ {$this->lang['auth_disabled']}\n";
+            $this->output("   ⚠  {$this->lang['auth_disabled']}");
         }
 
         $htaccess .= <<<HTACCESS
-# Zakázať prístup k PHP súborom
+# Block access to PHP files
 <FilesMatch "\\.php$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
 
-# Povoliť prístup k HTML a assets
+# Allow access to HTML and assets
 <FilesMatch "\\.(html|css|js|png|jpg|gif|svg)$">
     Order Allow,Deny
     Allow from all
 </FilesMatch>
 
-# Index súbory
+# Index files
 DirectoryIndex index.html
 HTACCESS;
 
         file_put_contents($this->settings['output_dir'] . '/.htaccess', $htaccess);
     }
 
-    private function getHTMLTemplate(string $title, string $content, string $type): string {
+    private function getHTMLTemplate($title, $content, $type) {
         $searchBar = ($type === 'file') ? '<input type="text" id="search" placeholder="' . $this->lang['search_placeholder'] . '" class="search-box">' : '';
 
         return <<<HTML
@@ -1038,6 +1046,6 @@ HTML;
     }
 }
 
-// ===== SPUSTENIE =====
+// ===== EXECUTION =====
 $generator = new phpDocGenerator($settings, $translations);
 $generator->generate();
