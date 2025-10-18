@@ -1,4 +1,4 @@
-# phpDoc Generator v0.4.2
+# phpDoc Generator v0.4.3
 
 🚀 **PHP Documentation Generator** - Automatically generates beautiful HTML documentation from PHP files with DocBlock support.
 
@@ -62,8 +62,8 @@ Open `output/index.html` in your web browser.
 
 ## 🌐 Live Demo
 
-- **Generator:** https://contentigniter.kukis.sk/phpDoc/generator.php
-- **Documentation:** https://contentigniter.kukis.sk/phpDoc/output
+- **Generator:** https://phpdoc.kukis.sk/phpdoc/generator.php
+- **Documentation:** https://phpdoc.kukis.sk/phpdoc/output/
 
 ## 📖 Usage Example
 

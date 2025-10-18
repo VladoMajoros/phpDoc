@@ -12,9 +12,8 @@
 $settings = [
     // Directories to scan (will be traversed recursively)
     'directories' => [
-        '../app/Controllers',
-        '../app/Models',
-        '../app/Views',
+        '../wp-content/plugins',
+        '../wp-includes',
     ],
 
     // Output directory for documentation (relative to generator.php)
