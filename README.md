@@ -62,8 +62,8 @@ Open `output/index.html` in your web browser.
 
 ## 🌐 Live Demo
 
-- **Generator:** https://phpdoc.kukis.sk/phpdoc/generator.php
-- **Documentation:** https://phpdoc.kukis.sk/phpdoc/output/
+- **Generator:** https://phpdoc.kukis.sk/demo/generator.php
+- **Documentation:** https://phpdoc.kukis.sk/demo/output/
 
 ## 📖 Usage Example
 
