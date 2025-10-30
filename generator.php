@@ -1,19 +1,21 @@
+
 <?php
 /**
- * phpDocGenerator v0.4.3
+ * phpDocGenerator v0.4.5
  * PHP Documentation Output Creator
  * Generates HTML documentation from PHP files
  */
 
+// @CONFIG_START - User editable configuration section
 // ============================================================================
-// CONFIGURATION - adjust as needed
+// USER CONFIGURATION - Modify values below
 // ============================================================================
 
 $settings = [
     // Directories to scan (will be traversed recursively)
     'directories' => [
-        '../wp-content/plugins',
-        '../wp-includes',
+        './wp/wp-content/plugins',
+        './wp/wp-includes',
     ],
 
     // Output directory for documentation (relative to generator.php)
@@ -36,8 +38,50 @@ $settings = [
         // 'user' => 'pass456',
     ],
 
-    // Active language (sk, en, de)
+    // Active language (en, sk, cs, de, ru, ja)
     'language' => 'en',
+    
+    // Available languages in documentation
+    'available_languages' => ['en', 'sk', 'cs', 'de', 'ru', 'ja'],
+];
+
+// @CONFIG_END - Do not edit below this line unless you know what you're doing
+
+// ============================================================================
+// LANGUAGE DEFINITIONS
+// ============================================================================
+
+$languages = [
+    'en' => [
+        'name' => 'English',
+        'native' => 'English',
+        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281zm-184 20 6 35L54 480H0zM640 0v3L391 191l2-44L590 0zM0 0l239 176h-60L0 42z"/><path fill="#FFF" d="M241 0v480h160V0zM0 160v160h640V160z"/><path fill="#C8102E" d="M0 193v96h640v-96zM273 0v480h96V0z"/></svg>'
+    ],
+    'sk' => [
+        'name' => 'Slovak',
+        'native' => 'Slovenčina',
+        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#ee1c25" d="M0 0h640v480H0z"/><path fill="#0b4ea2" d="M0 0h640v320H0z"/><path fill="#fff" d="M0 0h640v160H0z"/><path fill="#fff" d="M233 370.8c-43-20.7-104.6-61.9-104.6-143.2 0-81.4 4-118.4 4-118.4h201.3s3.9 37 3.9 118.4S276 350 233 370.8"/><path fill="#ee1c25" d="M233 360c-39.5-19-96-56.8-96-131.4s3.6-108.6 3.6-108.6h184.8s3.5 34 3.5 108.6C329 303.3 272.5 341 233 360"/><path fill="#fff" d="M241.4 209c10.7.2 31.6.6 50.1-5.6 0 0-.4 6.7-.4 14.4s.5 14.4.5 14.4c-17-5.7-38.1-5.8-50.2-5.7v41.2h-16.8v-41.2c-12-.1-33.1 0-50.1 5.7 0 0 .5-6.7.5-14.4s-.5-14.4-.5-14.4c18.5 6.2 39.4 5.8 50 5.6v-25.9c-9.7 0-23.7.4-39.6 5.7 0 0 .5-6.6.5-14.4 0-7.7-.5-14.4-.5-14.4 15.9 5.3 29.9 5.8 39.6 5.7-.5-16.4-5.3-37-5.3-37s9.9.7 13.8.7 13.8-.7 13.8-.7-4.8 20.6-5.3 37c9.7.1 23.7-.4 39.6-5.7 0 0-.5 6.7-.5 14.4s.5 14.4.5 14.4a119 119 0 0 0-39.7-5.7v26z"/><path fill="#0b4ea2" d="M233 263.3c-19.9 0-30.5 27.5-30.5 27.5s-6-13-22.2-13c-11 0-19 9.7-24.2 18.8 20 31.7 51.9 51.3 76.9 63.4 25-12 57-31.7 76.9-63.4-5.2-9-13.2-18.8-24.2-18.8-16.2 0-22.2 13-22.2 13S253 263.3 233 263.3"/></svg>'
+    ],
+    'cs' => [
+        'name' => 'Czech',
+        'native' => 'Čeština',
+        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#fff" d="M0 0h640v240H0z"/><path fill="#d7141a" d="M0 240h640v240H0z"/><path fill="#11457e" d="M360 240 0 0v480z"/></svg>'
+    ],
+    'de' => [
+        'name' => 'German',
+        'native' => 'Deutsch',
+        'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><path fill="#ffce00" d="M0 320h640v160H0z"/><path d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/></svg>'
+    ],
+    'ru' => [
+        'name' => 'Russian',
+        'native' => 'Русский',
+        'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></g></svg>'
+    ],
+    'ja' => [
+        'name' => 'Japanese',
+        'native' => '日本語',
+        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><defs><clipPath id="jp-a"><path fill-opacity=".7" d="M-88 32h640v480H-88z"/></clipPath></defs><g fill-rule="evenodd" stroke-width="1pt" clip-path="url(#jp-a)" transform="translate(88 -32)"><path fill="#fff" d="M-128 32h720v480h-720z"/><circle cx="523.1" cy="344.1" r="194.9" fill="#bc002d" transform="translate(-168.4 8.6)scale(.76554)"/></g></svg>'
+    ],
 ];
 
 // ============================================================================
@@ -46,52 +90,100 @@ $settings = [
 
 $translations = [
     'sk' => [
-        'home' => 'Domov',
-        'files' => 'Súborov',
-        'classes' => 'Tried',
-        'functions' => 'Funkcií',
-        'project_structure' => 'Štruktúra projektu',
-        'parameters' => 'Parametre',
-        'return' => 'return',
-        'search_placeholder' => '🔎 Hľadať funkcie...',
-        'class' => 'class',
-        'function' => 'function',
-        'protected_area' => 'Chránená oblasť',
-        'auth_enabled' => 'HTTP autentifikácia zapnutá',
-        'auth_disabled' => 'HTTP autentifikácia vypnutá - verejný prístup',
-        'users' => 'Používatelia',
+        'GENERATOR_HOME' => 'Domov',
+        'GENERATOR_FILES' => 'Súborov',
+        'GENERATOR_CLASSES' => 'Tried',
+        'GENERATOR_FUNCTIONS' => 'Funkcií',
+        'GENERATOR_PROJECT_STRUCTURE' => 'Štruktúra projektu',
+        'GENERATOR_PARAMETERS' => 'Parametre',
+        'GENERATOR_RETURN' => 'návrat',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hľadať funkcie...',
+        'GENERATOR_CLASS' => 'trieda',
+        'GENERATOR_FUNCTION' => 'funkcia',
+        'GENERATOR_PROTECTED_AREA' => 'Chránená oblasť',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP autentifikácia zapnutá',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP autentifikácia vypnutá - verejný prístup',
+        'GENERATOR_USERS' => 'Používatelia',
     ],
     'en' => [
-        'home' => 'Home',
-        'files' => 'Files',
-        'classes' => 'Classes',
-        'functions' => 'Functions',
-        'project_structure' => 'Project Structure',
-        'parameters' => 'Parameters',
-        'return' => 'return',
-        'search_placeholder' => '🔎 Search functions...',
-        'class' => 'class',
-        'function' => 'function',
-        'protected_area' => 'Protected Area',
-        'auth_enabled' => 'HTTP authentication enabled',
-        'auth_disabled' => 'HTTP authentication disabled - public access',
-        'users' => 'Users',
+        'GENERATOR_HOME' => 'Home',
+        'GENERATOR_FILES' => 'Files',
+        'GENERATOR_CLASSES' => 'Classes',
+        'GENERATOR_FUNCTIONS' => 'Functions',
+        'GENERATOR_PROJECT_STRUCTURE' => 'Project Structure',
+        'GENERATOR_PARAMETERS' => 'Parameters',
+        'GENERATOR_RETURN' => 'return',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Search functions...',
+        'GENERATOR_CLASS' => 'class',
+        'GENERATOR_FUNCTION' => 'function',
+        'GENERATOR_PROTECTED_AREA' => 'Protected Area',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP authentication enabled',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP authentication disabled - public access',
+        'GENERATOR_USERS' => 'Users',
+    ],
+    'cs' => [
+        'GENERATOR_HOME' => 'Domů',
+        'GENERATOR_FILES' => 'Souborů',
+        'GENERATOR_CLASSES' => 'Tříd',
+        'GENERATOR_FUNCTIONS' => 'Funkcí',
+        'GENERATOR_PROJECT_STRUCTURE' => 'Struktura projektu',
+        'GENERATOR_PARAMETERS' => 'Parametry',
+        'GENERATOR_RETURN' => 'návrat',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hledat funkce...',
+        'GENERATOR_CLASS' => 'třída',
+        'GENERATOR_FUNCTION' => 'funkce',
+        'GENERATOR_PROTECTED_AREA' => 'Chráněná oblast',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP autentizace zapnuta',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP autentizace vypnuta - veřejný přístup',
+        'GENERATOR_USERS' => 'Uživatelé',
     ],
     'de' => [
-        'home' => 'Startseite',
-        'files' => 'Dateien',
-        'classes' => 'Klassen',
-        'functions' => 'Funktionen',
-        'project_structure' => 'Projektstruktur',
-        'parameters' => 'Parameter',
-        'return' => 'return',
-        'search_placeholder' => '🔎 Funktionen suchen...',
-        'class' => 'class',
-        'function' => 'function',
-        'protected_area' => 'Geschützter Bereich',
-        'auth_enabled' => 'HTTP-Authentifizierung aktiviert',
-        'auth_disabled' => 'HTTP-Authentifizierung deaktiviert - öffentlicher Zugang',
-        'users' => 'Benutzer',
+        'GENERATOR_HOME' => 'Startseite',
+        'GENERATOR_FILES' => 'Dateien',
+        'GENERATOR_CLASSES' => 'Klassen',
+        'GENERATOR_FUNCTIONS' => 'Funktionen',
+        'GENERATOR_PROJECT_STRUCTURE' => 'Projektstruktur',
+        'GENERATOR_PARAMETERS' => 'Parameter',
+        'GENERATOR_RETURN' => 'Rückgabe',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Funktionen suchen...',
+        'GENERATOR_CLASS' => 'Klasse',
+        'GENERATOR_FUNCTION' => 'Funktion',
+        'GENERATOR_PROTECTED_AREA' => 'Geschützter Bereich',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP-Authentifizierung aktiviert',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP-Authentifizierung deaktiviert - öffentlicher Zugang',
+        'GENERATOR_USERS' => 'Benutzer',
+    ],
+    'ru' => [
+        'GENERATOR_HOME' => 'Главная',
+        'GENERATOR_FILES' => 'Файлов',
+        'GENERATOR_CLASSES' => 'Классов',
+        'GENERATOR_FUNCTIONS' => 'Функций',
+        'GENERATOR_PROJECT_STRUCTURE' => 'Структура проекта',
+        'GENERATOR_PARAMETERS' => 'Параметры',
+        'GENERATOR_RETURN' => 'возврат',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Поиск функций...',
+        'GENERATOR_CLASS' => 'класс',
+        'GENERATOR_FUNCTION' => 'функция',
+        'GENERATOR_PROTECTED_AREA' => 'Защищённая область',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP-аутентификация включена',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP-аутентификация отключена - публичный доступ',
+        'GENERATOR_USERS' => 'Пользователи',
+    ],
+    'ja' => [
+        'GENERATOR_HOME' => 'ホーム',
+        'GENERATOR_FILES' => 'ファイル',
+        'GENERATOR_CLASSES' => 'クラス',
+        'GENERATOR_FUNCTIONS' => '関数',
+        'GENERATOR_PROJECT_STRUCTURE' => 'プロジェクト構造',
+        'GENERATOR_PARAMETERS' => 'パラメータ',
+        'GENERATOR_RETURN' => '戻り値',
+        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 関数を検索...',
+        'GENERATOR_CLASS' => 'クラス',
+        'GENERATOR_FUNCTION' => '関数',
+        'GENERATOR_PROTECTED_AREA' => '保護エリア',
+        'GENERATOR_AUTH_ENABLED' => 'HTTP認証が有効',
+        'GENERATOR_AUTH_DISABLED' => 'HTTP認証が無効 - パブリックアクセス',
+        'GENERATOR_USERS' => 'ユーザー',
     ],
 ];
 
@@ -100,7 +192,7 @@ $translations = [
 // ============================================================================
 
 class phpDocGenerator {
-    const VERSION = '0.4.3';
+    const VERSION = '0.4.5';
 
     private $settings = [];
     private $files = [];
@@ -110,10 +202,14 @@ class phpDocGenerator {
     private $fileTree = [];
     private $baseDir = null;
     private $lang = [];
+    private $languages = [];
+    private $translations = [];
     private $isCLI = false;
 
-    public function __construct($settings, $translations) {
+    public function __construct($settings, $translations, $languages) {
         $this->settings = $settings;
+        $this->translations = $translations;
+        $this->languages = $languages;
         $this->lang = $translations[$settings['language']] ?? $translations['en'];
         $this->isCLI = php_sapi_name() === 'cli';
         $this->validateSettings();
@@ -457,23 +553,22 @@ class phpDocGenerator {
 
         $header = $this->generateHeader($rootPath);
         $breadcrumb = $this->generateBreadcrumb($relativePath, $rootPath);
+        $searchBox = '<input type="text" id="search" placeholder="' . $this->lang['GENERATOR_SEARCH_PLACEHOLDER'] . '" class="search-box">';
         $content = $this->generateFileContent($file, $doc);
 
-        return $this->getHTMLTemplate(basename($file), $header . $breadcrumb . $content, 'file');
+        return $this->getHTMLTemplate(basename($file), $header . $breadcrumb . $searchBox . $content, 'file', $rootPath);
     }
 
     private function generateBreadcrumb($path, $rootPath = '') {
         $parts = explode('/', $path);
         $breadcrumb = '<div class="breadcrumb">';
-        $breadcrumb .= '<a href="' . $rootPath . 'index.html">' . $this->lang['home'] . '</a>';
+        $breadcrumb .= '<a href="' . $rootPath . 'index.html">' . $this->lang['GENERATOR_HOME'] . '</a>';
 
         $currentPath = '';
         foreach ($parts as $index => $part) {
             if ($index === count($parts) - 1) {
-                // Last part - current file
                 $breadcrumb .= ' <span class="separator">›</span> <span class="current">' . htmlspecialchars($part) . '</span>';
             } else {
-                // Directory
                 $currentPath .= ($currentPath ? '/' : '') . $part;
                 $breadcrumb .= ' <span class="separator">›</span> <a href="' . $rootPath . $currentPath . '/index.html">' . htmlspecialchars($part) . '</a>';
             }
@@ -489,13 +584,46 @@ class phpDocGenerator {
         $html .= "<a href='{$rootPath}index.html'><img src='https://contentigniter.kukis.sk/phpDoc/phpdoc-app-logo.png' alt='phpDOC'></a>\n";
         $html .= "<small>v" . self::VERSION . "</small>\n";
         $html .= "</div>\n";
+        
+        // Language picker
+        $html .= $this->generateLanguagePicker();
+        
         $html .= "<div class='stats-header'>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->files) . "</span><span class='stat-label'>" . $this->lang['files'] . "</span></div>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allClasses) . "</span><span class='stat-label'>" . $this->lang['classes'] . "</span></div>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allFunctions) . "</span><span class='stat-label'>" . $this->lang['functions'] . "</span></div>\n";
+        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->files) . "</span><span class='stat-label' data-i18n='GENERATOR_FILES'>" . $this->lang['GENERATOR_FILES'] . "</span></div>\n";
+        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allClasses) . "</span><span class='stat-label' data-i18n='GENERATOR_CLASSES'>" . $this->lang['GENERATOR_CLASSES'] . "</span></div>\n";
+        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allFunctions) . "</span><span class='stat-label' data-i18n='GENERATOR_FUNCTIONS'>" . $this->lang['GENERATOR_FUNCTIONS'] . "</span></div>\n";
         $html .= "</div>\n";
         $html .= "</div>\n";
 
+        return $html;
+    }
+
+    private function generateLanguagePicker() {
+        $currentLang = $this->settings['language'];
+        $currentLangData = $this->languages[$currentLang];
+        
+        $html = "<div class='language-picker'>\n";
+        $html .= "<div class='lang-current' onclick='toggleLanguagePicker()'>\n";
+        $html .= $currentLangData['flag'];
+        $html .= "<span class='lang-name'>" . htmlspecialchars($currentLangData['native']) . "</span>\n";
+        $html .= "<span class='lang-arrow'>▼</span>\n";
+        $html .= "</div>\n";
+        $html .= "<div class='lang-dropdown' id='langDropdown' style='display:none;'>\n";
+        
+        foreach ($this->settings['available_languages'] as $code) {
+            if ($code === $currentLang) continue;
+            if (!isset($this->languages[$code])) continue;
+            
+            $langData = $this->languages[$code];
+            $html .= "<div class='lang-option' onclick='changeLang(\"$code\")'>\n";
+            $html .= $langData['flag'];
+            $html .= "<span class='lang-name'>" . htmlspecialchars($langData['native']) . "</span>\n";
+            $html .= "</div>\n";
+        }
+        
+        $html .= "</div>\n";
+        $html .= "</div>\n";
+        
         return $html;
     }
 
@@ -507,7 +635,7 @@ class phpDocGenerator {
 
         foreach ($doc['classes'] as $class) {
             $html .= "<div class='class'>\n";
-            $html .= "<h2><span class='keyword'>" . $this->lang['class'] . "</span> <span class='class-name'>" . htmlspecialchars($class['name']) . "</span></h2>\n";
+            $html .= "<h2><span class='keyword' data-i18n='GENERATOR_CLASS'>" . $this->lang['GENERATOR_CLASS'] . "</span> <span class='class-name'>" . htmlspecialchars($class['name']) . "</span></h2>\n";
 
             if ($class['comment'] && !empty($class['comment']['description'])) {
                 $html .= "<div class='description'>" . htmlspecialchars($class['comment']['description']) . "</div>\n";
@@ -538,7 +666,7 @@ class phpDocGenerator {
         $html = "<div class='method-item'>\n";
         $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
         $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
-        $html .= "<span class='keyword'>" . $this->lang['function'] . "</span> <span class='function-name'>" . htmlspecialchars($method['name']) . "</span>";
+        $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($method['name']) . "</span>";
         $html .= "<span class='params-preview'>" . $params . "</span>\n";
         $html .= "</div>\n";
 
@@ -549,7 +677,7 @@ class phpDocGenerator {
         }
 
         if ($method['comment'] && !empty($method['comment']['params'])) {
-            $html .= "<div class='parameters'><strong>" . $this->lang['parameters'] . ":</strong>\n";
+            $html .= "<div class='parameters'><strong data-i18n='GENERATOR_PARAMETERS'>" . $this->lang['GENERATOR_PARAMETERS'] . ":</strong>\n";
             foreach ($method['comment']['params'] as $param) {
                 $html .= "<div class='param'><span class='type'>" . htmlspecialchars($param['type']) . "</span> ";
                 $html .= "<span class='var'>\$" . htmlspecialchars($param['name']) . "</span>";
@@ -562,7 +690,7 @@ class phpDocGenerator {
         }
 
         if ($method['comment'] && !empty($method['comment']['return'])) {
-            $html .= "<div class='return'><span class='keyword'>" . $this->lang['return'] . "</span> " . htmlspecialchars($method['comment']['return']) . "</div>\n";
+            $html .= "<div class='return'><span class='keyword' data-i18n='GENERATOR_RETURN'>" . $this->lang['GENERATOR_RETURN'] . "</span> " . htmlspecialchars($method['comment']['return']) . "</div>\n";
         }
 
         $html .= "</div>\n";
@@ -578,7 +706,7 @@ class phpDocGenerator {
         $html = "<div class='function'>\n";
         $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
         $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
-        $html .= "<span class='keyword'>" . $this->lang['function'] . "</span> <span class='function-name'>" . htmlspecialchars($function['name']) . "</span>";
+        $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($function['name']) . "</span>";
         $html .= "<span class='params-preview'>" . $params . "</span>\n";
         $html .= "</div>\n";
 
@@ -613,7 +741,7 @@ class phpDocGenerator {
                 $treeHtml = $this->generateTreeHTML($subTree);
                 $content = $header . $breadcrumb . "<div class='directory-index'><h1>" . $this->getFolderIcon() . " " . htmlspecialchars($dirName) . "</h1>" . $treeHtml . "</div>";
 
-                $html = $this->getHTMLTemplate($dirName, $content, 'directory');
+                $html = $this->getHTMLTemplate($dirName, $content, 'directory', $rootPath);
                 file_put_contents($outputFile, $html);
 
                 $this->generateDirIndex($subTree, $dirPath);
@@ -652,11 +780,11 @@ class phpDocGenerator {
         $header = $this->generateHeader('');
 
         $content = "<div class='main-tree'>\n";
-        $content .= "<h2>" . $this->lang['project_structure'] . "</h2>\n";
+        $content .= "<h2 data-i18n='GENERATOR_PROJECT_STRUCTURE'>" . $this->lang['GENERATOR_PROJECT_STRUCTURE'] . "</h2>\n";
         $content .= $this->generateFullTreeHTML($this->fileTree, '');
         $content .= "</div>\n";
 
-        $html = $this->getHTMLTemplate('phpDocGenerator', $header . $content, 'main');
+        $html = $this->getHTMLTemplate('phpDocGenerator', $header . $content, 'main', '');
         file_put_contents($this->settings['output_dir'] . '/index.html', $html);
     }
 
@@ -668,8 +796,9 @@ class phpDocGenerator {
             foreach ($tree['dirs'] as $dirName => $subTree) {
                 $dirPath = $path ? $path . '/' . $dirName : $dirName;
                 $html .= "<div class='tree-item tree-dir'>\n";
+                $html .= "<span class='folder-toggle' onclick='toggleFolder(this)'>▶</span> ";
                 $html .= $this->getFolderIcon() . " <a href='" . htmlspecialchars($dirPath) . "/index.html'>" . htmlspecialchars($dirName) . "</a>\n";
-                $html .= $this->generateFullTreeHTML($subTree, $dirPath);
+                $html .= "<div class='tree-children' style='display:none;'>" . $this->generateFullTreeHTML($subTree, $dirPath) . "</div>";
                 $html .= "</div>\n";
             }
         }
@@ -697,7 +826,7 @@ class phpDocGenerator {
     }
 
     private function createHtaccess() {
-        $this->output("🔒 Creating .htaccess...");
+        $this->output("🔐 Creating .htaccess...");
 
         $htaccess = '';
 
@@ -713,7 +842,7 @@ class phpDocGenerator {
             $htaccess = <<<HTACCESS
 # HTTP Authentication
 AuthType Basic
-AuthName "phpDocGenerator - {$this->lang['protected_area']}"
+AuthName "phpDocGenerator - {$this->lang['GENERATOR_PROTECTED_AREA']}"
 AuthUserFile {$htpasswdPath}
 Require valid-user
 
@@ -724,13 +853,13 @@ Require valid-user
 
 
 HTACCESS;
-            $this->output("   ✓ {$this->lang['auth_enabled']}");
-            $this->output("   {$this->lang['users']}:");
+            $this->output("   ✓ {$this->lang['GENERATOR_AUTH_ENABLED']}");
+            $this->output("   {$this->lang['GENERATOR_USERS']}:");
             foreach ($this->settings['http_auth'] as $username => $password) {
                 $this->output("     - {$username}");
             }
         } else {
-            $this->output("   ⚠  {$this->lang['auth_disabled']}");
+            $this->output("   ⚠   {$this->lang['GENERATOR_AUTH_DISABLED']}");
         }
 
         $htaccess .= <<<HTACCESS
@@ -753,9 +882,10 @@ HTACCESS;
         file_put_contents($this->settings['output_dir'] . '/.htaccess', $htaccess);
     }
 
-    private function getHTMLTemplate($title, $content, $type) {
-        $searchBar = ($type === 'file') ? '<input type="text" id="search" placeholder="' . $this->lang['search_placeholder'] . '" class="search-box">' : '';
-
+    private function getHTMLTemplate($title, $content, $type, $rootPath = '') {
+        // Get translations as JSON for JavaScript
+        $translationsJson = json_encode($this->translations, JSON_UNESCAPED_UNICODE);
+        
         return <<<HTML
 <!DOCTYPE html>
 <html lang="{$this->settings['language']}">
@@ -805,6 +935,7 @@ HTACCESS;
             color: #d4d4d4;
             font-size: 16px;
             border-radius: 4px;
+            margin-top: 20px;
             margin-bottom: 20px;
         }
         .search-box:focus {
@@ -928,11 +1059,12 @@ HTACCESS;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 30px;
+            padding: 3px 30px;
             background: #252526;
             border-radius: 8px;
             margin-bottom: 30px;
             border-left: 4px solid #007acc;
+			position: relative;
         }
         .logo {
             display: flex;
@@ -950,6 +1082,70 @@ HTACCESS;
         .logo small {
             color: #858585;
             font-size: 11px;
+        }
+        .language-picker {
+           position: absolute;
+			top: 45px; left: 152px;
+        }
+        .lang-current {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #1e1e1e;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lang-current:hover {
+            background: #2d2d30;
+            border-color: #007acc;
+        }
+        .lang-current svg {
+            width: 30px;
+            height: 18px;
+        }
+        .lang-name {
+            color: #d4d4d4;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .lang-arrow {
+            color: #858585;
+            font-size: 10px;
+            margin-left: 4px;
+            transition: transform 0.2s;
+        }
+        .lang-current.active .lang-arrow {
+            transform: rotate(180deg);
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 100%;
+        }
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .lang-option:hover {
+            background: #2d2d30;
+        }
+        .lang-option svg {
+            width: 30px;
+            height: 18px;
         }
         .stats-header {
             display: flex;
@@ -995,18 +1191,86 @@ HTACCESS;
         .tree-item a:hover {
             color: #4ec9b0;
         }
-        .tree-dir .tree {
+        .tree-dir .tree-children {
             margin-left: 30px;
             margin-top: 8px;
         }
+        .folder-toggle {
+            color: #007acc;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            width: 12px;
+            transition: transform 0.2s;
+        }
+        .folder-toggle.expanded {
+            transform: rotate(90deg);
+        }
     </style>
+<link rel="icon" type="image/x-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAC4jAAAuIwF4pT92AAAEbUlEQVR4nO2VfUwbdRjH79rr9b13ZUhLO2gdFZCM0TJkUYZxRpbMgexfF5M5NnXzP18GjEWd8qcvi3G4AVuyOGMmCDNmw2ECyej+aCkJhZaXCgys0DfoGy3tXbkXfyeEkCldFjNNDJfLpf3e83s+v+/zPPkdUli0G3qcF/JYs28DtgH/BsC/+9WorlJ3t1kY9/4jAMtDCExHCRUwxEIsg64E0LiPhXmkYicEwSSWuyrJRBOLnAjBhHIXLZT/uYwRJJaEMc/DAZQQ8xcfBelgloFgSJAIZo53SUJTlFjJCMQ+0+sQyyLJsMrxnTg07d/zWkqeDdIDNpIM7XD9hM1bHgYQYWBfmNuMz90FGJ/x2HLOczyKYBAx5r6Hz/bH1cZgwSvJjDywZQLXyz2DGdO9KbnGV3IsnHdQ7h3m0WQ6QEqqgmBY6neIwzPCqDtYUMPwURLLoQUSmc8uDt8HFoEJ4IzbO8tIFieBCO6l/BoGEbE8PkRv7QCUNaXQ8okoKD0Hk2evipRS/yglwkFv0BjXXhAAnmjME1eX8FNxUdQN/gKvtAiTBMZ4q8l0JeI6zFWfSmQWJHc8Fc2pACnknqGI/gWEjIIqgwBSrkGICJKKkZgOeE0qdxG4bnnns8CWcrafG400ANDGVWkWJcSXCo+s9U09cg3MBo3IJL4JPk3SAiklUIhC92GGSsnUNCoL5tfALIymYtlDV6WLYw8k5fP5DMOwLLsOAE1blTyBuwcypn7mJCLCo1MZmVlVqnkRnyWUzzMwzxOzzTiGk4gczBU2ay6ODRnLSnEeFRMonU7Ngmd9UpVKZfkzZTKZLJkkQqGgxTrIAWKaMmBDHJpZ68HaRSbj5fnaFw8c+Li5WSwSHT1UuVRe1NI3DZNkqQp5s7bWarNZHE6TyXi2saG1/YrD4VCpVI31Z4bt9gGzubCw8FxTU03tEQ4AhkcacEqCv262ubKSmJicNBpL7PaRRCLhdI5duPB5UqZp6+x6v+G4d2r0zp1eEDa/sGAwGE6feuudd987eaIOESDfXP8W6HNzvxXk56+XSOGx/X1/+HwezEMQLsYfCFgs1kOV+we6rxkN2p7O6xthNttQVdVLe4qLS0tNN250bOjfd3RCj3TYBQIBTKHQ6/VCFF2OLm/yugL2kavLRQVoJBLZ0H0+36MBcBxfjsV8Xh+ZSikwxYYuk0kZhp7/fZ6iKJUq64FV6QAUTTMsA5aB3xiGlZpMvb2/TM/MOEYdYFT6+vrXwvbtKweifWRkZHS0uvrwD13dBEEAvajo6fHxiS0BYrH4Sb0+W63eX1ERCofK9u61WK0dHZ1g8aXWthN1x6sPvwz6D6ZIo9G0tFwiSbK1rf2T8x+Bobp16zawqNVq0wGAWTA83Td/NBjywuEMs/nepMtF09yJ43K5LrZ8/cbJurdPn7IO2j797AuvlztOwLO+obG+/szFr7683dNz+XJbuhKBOWu/cnWrt263+4MPz/9VD0ciZ5vObVb+60/mNuD/APgD2WkPFjbIceMAAAAASUVORK5CYII=">
 </head>
 <body>
     <div class="container">
-        $searchBar
         $content
     </div>
     <script>
+        // Translations data
+        const translations = $translationsJson;
+        
+        // Get current language from localStorage or default
+        let currentLang = localStorage.getItem('phpdoc_lang') || '{$this->settings['language']}';
+        
+        // Apply translations
+        function applyTranslations() {
+            const lang = translations[currentLang] || translations['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (lang[key]) {
+                    el.textContent = lang[key];
+                }
+            });
+            
+            // Update search placeholder
+            const searchBox = document.getElementById('search');
+            if (searchBox && lang['GENERATOR_SEARCH_PLACEHOLDER']) {
+                searchBox.placeholder = lang['GENERATOR_SEARCH_PLACEHOLDER'];
+            }
+        }
+        
+        // Change language
+        function changeLang(newLang) {
+            currentLang = newLang;
+            localStorage.setItem('phpdoc_lang', newLang);
+            applyTranslations();
+            toggleLanguagePicker();
+        }
+        
+        // Toggle language picker dropdown
+        function toggleLanguagePicker() {
+            const dropdown = document.getElementById('langDropdown');
+            const current = document.querySelector('.lang-current');
+            
+            if (dropdown.style.display === 'none') {
+                dropdown.style.display = 'block';
+                current.classList.add('active');
+            } else {
+                dropdown.style.display = 'none';
+                current.classList.remove('active');
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const picker = document.querySelector('.language-picker');
+            if (picker && !picker.contains(e.target)) {
+                const dropdown = document.getElementById('langDropdown');
+                const current = document.querySelector('.lang-current');
+                if (dropdown) dropdown.style.display = 'none';
+                if (current) current.classList.remove('active');
+            }
+        });
+        
+        // Toggle method/function details
         function toggleMethod(id) {
             const details = document.getElementById(id);
             const icon = document.getElementById('icon-' + id);
@@ -1022,6 +1286,25 @@ HTACCESS;
             }
         }
         
+        // Toggle folder in tree
+        function toggleFolder(element) {
+            const treeItem = element.closest('.tree-item');
+            const children = treeItem.querySelector('.tree-children');
+            
+            if (children) {
+                if (children.style.display === 'none') {
+                    children.style.display = 'block';
+                    element.textContent = '▼';
+                    element.classList.add('expanded');
+                } else {
+                    children.style.display = 'none';
+                    element.textContent = '▶';
+                    element.classList.remove('expanded');
+                }
+            }
+        }
+        
+        // Search functionality
         const searchBox = document.getElementById('search');
         if (searchBox) {
             searchBox.addEventListener('input', function(e) {
@@ -1038,6 +1321,9 @@ HTACCESS;
                 });
             });
         }
+        
+        // Apply translations on page load
+        applyTranslations();
     </script>
 </body>
 </html>
@@ -1046,5 +1332,5 @@ HTML;
 }
 
 // ===== EXECUTION =====
-$generator = new phpDocGenerator($settings, $translations);
+$generator = new phpDocGenerator($settings, $translations, $languages);
 $generator->generate();
