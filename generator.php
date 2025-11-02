@@ -1,845 +1,845 @@
-
 <?php
-/**
- * phpDocGenerator v0.4.5
- * PHP Documentation Output Creator
- * Generates HTML documentation from PHP files
- */
-
-// @CONFIG_START - User editable configuration section
-// ============================================================================
-// USER CONFIGURATION - Modify values below
-// ============================================================================
-
-$settings = [
-    // Directories to scan (will be traversed recursively)
-    'directories' => [
-        './wp/wp-content/plugins',
-        './wp/wp-includes',
-    ],
-
-    // Output directory for documentation (relative to generator.php)
-    'output_dir' => 'output',
-
-    // Directories to skip (e.g. vendor, cache)
-    'exclude_dirs' => [
-        'vendor',
-        'cache',
-        'logs',
-        'tmp',
-        'node_modules',
-    ],
-
-    // HTTP authentication - add multiple users
-    // Leave empty array for public access
-    'http_auth' => [
-        // Format: 'username' => 'password'
-        // 'admin' => 'password123',
-        // 'user' => 'pass456',
-    ],
-
-    // Active language (en, sk, cs, de, ru, ja)
-    'language' => 'en',
-    
-    // Available languages in documentation
-    'available_languages' => ['en', 'sk', 'cs', 'de', 'ru', 'ja'],
-];
-
-// @CONFIG_END - Do not edit below this line unless you know what you're doing
-
-// ============================================================================
-// LANGUAGE DEFINITIONS
-// ============================================================================
-
-$languages = [
-    'en' => [
-        'name' => 'English',
-        'native' => 'English',
-        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281zm-184 20 6 35L54 480H0zM640 0v3L391 191l2-44L590 0zM0 0l239 176h-60L0 42z"/><path fill="#FFF" d="M241 0v480h160V0zM0 160v160h640V160z"/><path fill="#C8102E" d="M0 193v96h640v-96zM273 0v480h96V0z"/></svg>'
-    ],
-    'sk' => [
-        'name' => 'Slovak',
-        'native' => 'Slovenčina',
-        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#ee1c25" d="M0 0h640v480H0z"/><path fill="#0b4ea2" d="M0 0h640v320H0z"/><path fill="#fff" d="M0 0h640v160H0z"/><path fill="#fff" d="M233 370.8c-43-20.7-104.6-61.9-104.6-143.2 0-81.4 4-118.4 4-118.4h201.3s3.9 37 3.9 118.4S276 350 233 370.8"/><path fill="#ee1c25" d="M233 360c-39.5-19-96-56.8-96-131.4s3.6-108.6 3.6-108.6h184.8s3.5 34 3.5 108.6C329 303.3 272.5 341 233 360"/><path fill="#fff" d="M241.4 209c10.7.2 31.6.6 50.1-5.6 0 0-.4 6.7-.4 14.4s.5 14.4.5 14.4c-17-5.7-38.1-5.8-50.2-5.7v41.2h-16.8v-41.2c-12-.1-33.1 0-50.1 5.7 0 0 .5-6.7.5-14.4s-.5-14.4-.5-14.4c18.5 6.2 39.4 5.8 50 5.6v-25.9c-9.7 0-23.7.4-39.6 5.7 0 0 .5-6.6.5-14.4 0-7.7-.5-14.4-.5-14.4 15.9 5.3 29.9 5.8 39.6 5.7-.5-16.4-5.3-37-5.3-37s9.9.7 13.8.7 13.8-.7 13.8-.7-4.8 20.6-5.3 37c9.7.1 23.7-.4 39.6-5.7 0 0-.5 6.7-.5 14.4s.5 14.4.5 14.4a119 119 0 0 0-39.7-5.7v26z"/><path fill="#0b4ea2" d="M233 263.3c-19.9 0-30.5 27.5-30.5 27.5s-6-13-22.2-13c-11 0-19 9.7-24.2 18.8 20 31.7 51.9 51.3 76.9 63.4 25-12 57-31.7 76.9-63.4-5.2-9-13.2-18.8-24.2-18.8-16.2 0-22.2 13-22.2 13S253 263.3 233 263.3"/></svg>'
-    ],
-    'cs' => [
-        'name' => 'Czech',
-        'native' => 'Čeština',
-        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#fff" d="M0 0h640v240H0z"/><path fill="#d7141a" d="M0 240h640v240H0z"/><path fill="#11457e" d="M360 240 0 0v480z"/></svg>'
-    ],
-    'de' => [
-        'name' => 'German',
-        'native' => 'Deutsch',
-        'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><path fill="#ffce00" d="M0 320h640v160H0z"/><path d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/></svg>'
-    ],
-    'ru' => [
-        'name' => 'Russian',
-        'native' => 'Русский',
-        'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></g></svg>'
-    ],
-    'ja' => [
-        'name' => 'Japanese',
-        'native' => '日本語',
-        'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><defs><clipPath id="jp-a"><path fill-opacity=".7" d="M-88 32h640v480H-88z"/></clipPath></defs><g fill-rule="evenodd" stroke-width="1pt" clip-path="url(#jp-a)" transform="translate(88 -32)"><path fill="#fff" d="M-128 32h720v480h-720z"/><circle cx="523.1" cy="344.1" r="194.9" fill="#bc002d" transform="translate(-168.4 8.6)scale(.76554)"/></g></svg>'
-    ],
-];
-
-// ============================================================================
-// LANGUAGE TRANSLATIONS
-// ============================================================================
-
-$translations = [
-    'sk' => [
-        'GENERATOR_HOME' => 'Domov',
-        'GENERATOR_FILES' => 'Súborov',
-        'GENERATOR_CLASSES' => 'Tried',
-        'GENERATOR_FUNCTIONS' => 'Funkcií',
-        'GENERATOR_PROJECT_STRUCTURE' => 'Štruktúra projektu',
-        'GENERATOR_PARAMETERS' => 'Parametre',
-        'GENERATOR_RETURN' => 'návrat',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hľadať funkcie...',
-        'GENERATOR_CLASS' => 'trieda',
-        'GENERATOR_FUNCTION' => 'funkcia',
-        'GENERATOR_PROTECTED_AREA' => 'Chránená oblasť',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP autentifikácia zapnutá',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP autentifikácia vypnutá - verejný prístup',
-        'GENERATOR_USERS' => 'Používatelia',
-    ],
-    'en' => [
-        'GENERATOR_HOME' => 'Home',
-        'GENERATOR_FILES' => 'Files',
-        'GENERATOR_CLASSES' => 'Classes',
-        'GENERATOR_FUNCTIONS' => 'Functions',
-        'GENERATOR_PROJECT_STRUCTURE' => 'Project Structure',
-        'GENERATOR_PARAMETERS' => 'Parameters',
-        'GENERATOR_RETURN' => 'return',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Search functions...',
-        'GENERATOR_CLASS' => 'class',
-        'GENERATOR_FUNCTION' => 'function',
-        'GENERATOR_PROTECTED_AREA' => 'Protected Area',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP authentication enabled',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP authentication disabled - public access',
-        'GENERATOR_USERS' => 'Users',
-    ],
-    'cs' => [
-        'GENERATOR_HOME' => 'Domů',
-        'GENERATOR_FILES' => 'Souborů',
-        'GENERATOR_CLASSES' => 'Tříd',
-        'GENERATOR_FUNCTIONS' => 'Funkcí',
-        'GENERATOR_PROJECT_STRUCTURE' => 'Struktura projektu',
-        'GENERATOR_PARAMETERS' => 'Parametry',
-        'GENERATOR_RETURN' => 'návrat',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hledat funkce...',
-        'GENERATOR_CLASS' => 'třída',
-        'GENERATOR_FUNCTION' => 'funkce',
-        'GENERATOR_PROTECTED_AREA' => 'Chráněná oblast',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP autentizace zapnuta',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP autentizace vypnuta - veřejný přístup',
-        'GENERATOR_USERS' => 'Uživatelé',
-    ],
-    'de' => [
-        'GENERATOR_HOME' => 'Startseite',
-        'GENERATOR_FILES' => 'Dateien',
-        'GENERATOR_CLASSES' => 'Klassen',
-        'GENERATOR_FUNCTIONS' => 'Funktionen',
-        'GENERATOR_PROJECT_STRUCTURE' => 'Projektstruktur',
-        'GENERATOR_PARAMETERS' => 'Parameter',
-        'GENERATOR_RETURN' => 'Rückgabe',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Funktionen suchen...',
-        'GENERATOR_CLASS' => 'Klasse',
-        'GENERATOR_FUNCTION' => 'Funktion',
-        'GENERATOR_PROTECTED_AREA' => 'Geschützter Bereich',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP-Authentifizierung aktiviert',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP-Authentifizierung deaktiviert - öffentlicher Zugang',
-        'GENERATOR_USERS' => 'Benutzer',
-    ],
-    'ru' => [
-        'GENERATOR_HOME' => 'Главная',
-        'GENERATOR_FILES' => 'Файлов',
-        'GENERATOR_CLASSES' => 'Классов',
-        'GENERATOR_FUNCTIONS' => 'Функций',
-        'GENERATOR_PROJECT_STRUCTURE' => 'Структура проекта',
-        'GENERATOR_PARAMETERS' => 'Параметры',
-        'GENERATOR_RETURN' => 'возврат',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Поиск функций...',
-        'GENERATOR_CLASS' => 'класс',
-        'GENERATOR_FUNCTION' => 'функция',
-        'GENERATOR_PROTECTED_AREA' => 'Защищённая область',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP-аутентификация включена',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP-аутентификация отключена - публичный доступ',
-        'GENERATOR_USERS' => 'Пользователи',
-    ],
-    'ja' => [
-        'GENERATOR_HOME' => 'ホーム',
-        'GENERATOR_FILES' => 'ファイル',
-        'GENERATOR_CLASSES' => 'クラス',
-        'GENERATOR_FUNCTIONS' => '関数',
-        'GENERATOR_PROJECT_STRUCTURE' => 'プロジェクト構造',
-        'GENERATOR_PARAMETERS' => 'パラメータ',
-        'GENERATOR_RETURN' => '戻り値',
-        'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 関数を検索...',
-        'GENERATOR_CLASS' => 'クラス',
-        'GENERATOR_FUNCTION' => '関数',
-        'GENERATOR_PROTECTED_AREA' => '保護エリア',
-        'GENERATOR_AUTH_ENABLED' => 'HTTP認証が有効',
-        'GENERATOR_AUTH_DISABLED' => 'HTTP認証が無効 - パブリックアクセス',
-        'GENERATOR_USERS' => 'ユーザー',
-    ],
-];
-
-// ============================================================================
-// DOCUMENTATION GENERATOR - do not edit below unless you know what you're doing
-// ============================================================================
-
-class phpDocGenerator {
-    const VERSION = '0.4.5';
-
-    private $settings = [];
-    private $files = [];
-    private $documentation = [];
-    private $allClasses = [];
-    private $allFunctions = [];
-    private $fileTree = [];
-    private $baseDir = null;
-    private $lang = [];
-    private $languages = [];
-    private $translations = [];
-    private $isCLI = false;
-
-    public function __construct($settings, $translations, $languages) {
-        $this->settings = $settings;
-        $this->translations = $translations;
-        $this->languages = $languages;
-        $this->lang = $translations[$settings['language']] ?? $translations['en'];
-        $this->isCLI = php_sapi_name() === 'cli';
-        $this->validateSettings();
-    }
-
     /**
-     * Output message with proper line break based on environment
+     * phpDocGenerator v0.4.7
+     * PHP Documentation Output Creator
+     * Generates HTML documentation from PHP files
      */
-    private function output($message) {
-        if ($this->isCLI) {
-            echo $message . "\n";
-        } else {
-            echo htmlspecialchars($message) . "<br>\n";
+
+    // @CONFIG_START - User editable configuration section
+    // ============================================================================
+    // USER CONFIGURATION - Modify values below
+    // ============================================================================
+
+    $settings = [
+        // Directories to scan (will be traversed recursively)
+        'directories' => [
+            './wp/wp-content/plugins',
+            './wp/wp-includes',
+        ],
+
+
+        // Output directory for documentation (relative to generator.php)
+        'output_dir' => 'output',
+
+        // Directories to skip (e.g. vendor, cache)
+        'exclude_dirs' => [
+            'vendor',
+            'cache',
+            'logs',
+            'tmp',
+            'node_modules',
+        ],
+
+        // HTTP authentication - add multiple users
+        // Leave empty array for public access
+        'http_auth' => [
+            // Format: 'username' => 'password'
+            // 'admin' => 'password123',
+            // 'user' => 'pass456',
+        ],
+
+        // Active language (en, sk, cs, de, ru, ja)
+        'language' => 'en',
+
+        // Available languages in documentation
+        'available_languages' => ['en', 'sk', 'cs', 'de', 'ru', 'ja'],
+    ];
+
+    // @CONFIG_END - Do not edit below this line unless you know what you're doing
+
+    // ============================================================================
+    // LANGUAGE DEFINITIONS
+    // ============================================================================
+
+    $languages = [
+        'en' => [
+            'name' => 'English',
+            'native' => 'English',
+            'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281zm-184 20 6 35L54 480H0zM640 0v3L391 191l2-44L590 0zM0 0l239 176h-60L0 42z"/><path fill="#FFF" d="M241 0v480h160V0zM0 160v160h640V160z"/><path fill="#C8102E" d="M0 193v96h640v-96zM273 0v480h96V0z"/></svg>'
+        ],
+        'sk' => [
+            'name' => 'Slovak',
+            'native' => 'Slovenčina',
+            'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#ee1c25" d="M0 0h640v480H0z"/><path fill="#0b4ea2" d="M0 0h640v320H0z"/><path fill="#fff" d="M0 0h640v160H0z"/><path fill="#fff" d="M233 370.8c-43-20.7-104.6-61.9-104.6-143.2 0-81.4 4-118.4 4-118.4h201.3s3.9 37 3.9 118.4S276 350 233 370.8"/><path fill="#ee1c25" d="M233 360c-39.5-19-96-56.8-96-131.4s3.6-108.6 3.6-108.6h184.8s3.5 34 3.5 108.6C329 303.3 272.5 341 233 360"/><path fill="#fff" d="M241.4 209c10.7.2 31.6.6 50.1-5.6 0 0-.4 6.7-.4 14.4s.5 14.4.5 14.4c-17-5.7-38.1-5.8-50.2-5.7v41.2h-16.8v-41.2c-12-.1-33.1 0-50.1 5.7 0 0 .5-6.7.5-14.4s-.5-14.4-.5-14.4c18.5 6.2 39.4 5.8 50 5.6v-25.9c-9.7 0-23.7.4-39.6 5.7 0 0 .5-6.6.5-14.4 0-7.7-.5-14.4-.5-14.4 15.9 5.3 29.9 5.8 39.6 5.7-.5-16.4-5.3-37-5.3-37s9.9.7 13.8.7 13.8-.7 13.8-.7-4.8 20.6-5.3 37c9.7.1 23.7-.4 39.6-5.7 0 0-.5 6.7-.5 14.4s.5 14.4.5 14.4a119 119 0 0 0-39.7-5.7v26z"/><path fill="#0b4ea2" d="M233 263.3c-19.9 0-30.5 27.5-30.5 27.5s-6-13-22.2-13c-11 0-19 9.7-24.2 18.8 20 31.7 51.9 51.3 76.9 63.4 25-12 57-31.7 76.9-63.4-5.2-9-13.2-18.8-24.2-18.8-16.2 0-22.2 13-22.2 13S253 263.3 233 263.3"/></svg>'
+        ],
+        'cs' => [
+            'name' => 'Czech',
+            'native' => 'Čeština',
+            'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><path fill="#fff" d="M0 0h640v240H0z"/><path fill="#d7141a" d="M0 240h640v240H0z"/><path fill="#11457e" d="M360 240 0 0v480z"/></svg>'
+        ],
+        'de' => [
+            'name' => 'German',
+            'native' => 'Deutsch',
+            'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><path fill="#ffce00" d="M0 320h640v160H0z"/><path d="M0 0h640v160H0z"/><path fill="#d00" d="M0 160h640v160H0z"/></svg>'
+        ],
+        'ru' => [
+            'name' => 'Russian',
+            'native' => 'Русский',
+            'flag' => '<svg width="30" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></g></svg>'
+        ],
+        'ja' => [
+            'name' => 'Japanese',
+            'native' => '日本語',
+            'flag' => '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="18" viewBox="0 0 640 480"><defs><clipPath id="jp-a"><path fill-opacity=".7" d="M-88 32h640v480H-88z"/></clipPath></defs><g fill-rule="evenodd" stroke-width="1pt" clip-path="url(#jp-a)" transform="translate(88 -32)"><path fill="#fff" d="M-128 32h720v480h-720z"/><circle cx="523.1" cy="344.1" r="194.9" fill="#bc002d" transform="translate(-168.4 8.6)scale(.76554)"/></g></svg>'
+        ],
+    ];
+
+    // ============================================================================
+    // LANGUAGE TRANSLATIONS
+    // ============================================================================
+
+    $translations = [
+        'sk' => [
+            'GENERATOR_HOME' => 'Domov',
+            'GENERATOR_FILES' => 'Súborov',
+            'GENERATOR_CLASSES' => 'Tried',
+            'GENERATOR_FUNCTIONS' => 'Funkcií',
+            'GENERATOR_PROJECT_STRUCTURE' => 'Štruktúra projektu',
+            'GENERATOR_PARAMETERS' => 'Parametre',
+            'GENERATOR_RETURN' => 'návrat',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hľadať funkcie...',
+            'GENERATOR_CLASS' => 'trieda',
+            'GENERATOR_FUNCTION' => 'funkcia',
+            'GENERATOR_PROTECTED_AREA' => 'Chránená oblasť',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP autentifikácia zapnutá',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP autentifikácia vypnutá - verejný prístup',
+            'GENERATOR_USERS' => 'Používatelia',
+        ],
+        'en' => [
+            'GENERATOR_HOME' => 'Home',
+            'GENERATOR_FILES' => 'Files',
+            'GENERATOR_CLASSES' => 'Classes',
+            'GENERATOR_FUNCTIONS' => 'Functions',
+            'GENERATOR_PROJECT_STRUCTURE' => 'Project Structure',
+            'GENERATOR_PARAMETERS' => 'Parameters',
+            'GENERATOR_RETURN' => 'return',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Search functions...',
+            'GENERATOR_CLASS' => 'class',
+            'GENERATOR_FUNCTION' => 'function',
+            'GENERATOR_PROTECTED_AREA' => 'Protected Area',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP authentication enabled',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP authentication disabled - public access',
+            'GENERATOR_USERS' => 'Users',
+        ],
+        'cs' => [
+            'GENERATOR_HOME' => 'Domů',
+            'GENERATOR_FILES' => 'Souborů',
+            'GENERATOR_CLASSES' => 'Tříd',
+            'GENERATOR_FUNCTIONS' => 'Funkcí',
+            'GENERATOR_PROJECT_STRUCTURE' => 'Struktura projektu',
+            'GENERATOR_PARAMETERS' => 'Parametry',
+            'GENERATOR_RETURN' => 'návrat',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Hledat funkce...',
+            'GENERATOR_CLASS' => 'třída',
+            'GENERATOR_FUNCTION' => 'funkce',
+            'GENERATOR_PROTECTED_AREA' => 'Chráněná oblast',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP autentizace zapnuta',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP autentizace vypnuta - veřejný přístup',
+            'GENERATOR_USERS' => 'Uživatelé',
+        ],
+        'de' => [
+            'GENERATOR_HOME' => 'Startseite',
+            'GENERATOR_FILES' => 'Dateien',
+            'GENERATOR_CLASSES' => 'Klassen',
+            'GENERATOR_FUNCTIONS' => 'Funktionen',
+            'GENERATOR_PROJECT_STRUCTURE' => 'Projektstruktur',
+            'GENERATOR_PARAMETERS' => 'Parameter',
+            'GENERATOR_RETURN' => 'Rückgabe',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Funktionen suchen...',
+            'GENERATOR_CLASS' => 'Klasse',
+            'GENERATOR_FUNCTION' => 'Funktion',
+            'GENERATOR_PROTECTED_AREA' => 'Geschützter Bereich',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP-Authentifizierung aktiviert',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP-Authentifizierung deaktiviert - öffentlicher Zugang',
+            'GENERATOR_USERS' => 'Benutzer',
+        ],
+        'ru' => [
+            'GENERATOR_HOME' => 'Главная',
+            'GENERATOR_FILES' => 'Файлов',
+            'GENERATOR_CLASSES' => 'Классов',
+            'GENERATOR_FUNCTIONS' => 'Функций',
+            'GENERATOR_PROJECT_STRUCTURE' => 'Структура проекта',
+            'GENERATOR_PARAMETERS' => 'Параметры',
+            'GENERATOR_RETURN' => 'возврат',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 Поиск функций...',
+            'GENERATOR_CLASS' => 'класс',
+            'GENERATOR_FUNCTION' => 'функция',
+            'GENERATOR_PROTECTED_AREA' => 'Защищённая область',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP-аутентификация включена',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP-аутентификация отключена - публичный доступ',
+            'GENERATOR_USERS' => 'Пользователи',
+        ],
+        'ja' => [
+            'GENERATOR_HOME' => 'ホーム',
+            'GENERATOR_FILES' => 'ファイル',
+            'GENERATOR_CLASSES' => 'クラス',
+            'GENERATOR_FUNCTIONS' => '関数',
+            'GENERATOR_PROJECT_STRUCTURE' => 'プロジェクト構造',
+            'GENERATOR_PARAMETERS' => 'パラメータ',
+            'GENERATOR_RETURN' => '戻り値',
+            'GENERATOR_SEARCH_PLACEHOLDER' => '🔎 関数を検索...',
+            'GENERATOR_CLASS' => 'クラス',
+            'GENERATOR_FUNCTION' => '関数',
+            'GENERATOR_PROTECTED_AREA' => '保護エリア',
+            'GENERATOR_AUTH_ENABLED' => 'HTTP認証が有効',
+            'GENERATOR_AUTH_DISABLED' => 'HTTP認証が無効 - パブリックアクセス',
+            'GENERATOR_USERS' => 'ユーザー',
+        ],
+    ];
+
+    // ============================================================================
+    // DOCUMENTATION GENERATOR - do not edit below unless you know what you're doing
+    // ============================================================================
+
+    class phpDocGenerator {
+        const VERSION = '0.4.7';
+
+        private $settings = [];
+        private $files = [];
+        private $documentation = [];
+        private $allClasses = [];
+        private $allFunctions = [];
+        private $fileTree = [];
+        private $baseDir = null;
+        private $lang = [];
+        private $languages = [];
+        private $translations = [];
+        private $isCLI = false;
+
+        public function __construct($settings, $translations, $languages) {
+            $this->settings = $settings;
+            $this->translations = $translations;
+            $this->languages = $languages;
+            $this->lang = $translations[$settings['language']] ?? $translations['en'];
+            $this->isCLI = php_sapi_name() === 'cli';
+            $this->validateSettings();
         }
-    }
 
-    private function validateSettings() {
-        if (empty($this->settings['directories'])) {
-            $this->output("❌ Missing 'directories' in settings!");
-            exit(1);
-        }
-        if (empty($this->settings['output_dir'])) {
-            $this->settings['output_dir'] = 'output';
-        }
-    }
-
-    public function generate() {
-        $this->output("🚀 Starting phpDocGenerator v" . self::VERSION . "...");
-        $this->output("");
-
-        $this->scanDirectories();
-        $this->baseDir = $this->findCommonBasePath();
-        $this->parseFiles();
-        $this->buildFileTree();
-        $this->createOutputStructure();
-        $this->generateHTMLFiles();
-        $this->generateDirectoryIndexes();
-        $this->generateMainIndex();
-        $this->createHtaccess();
-
-        $this->output("");
-        $this->output("✅ Done! Open {$this->settings['output_dir']}/index.html in your browser.");
-    }
-
-    private function scanDirectories() {
-        $this->output("📂 Scanning directories...");
-        foreach ($this->settings['directories'] as $dir) {
-            if (!is_dir($dir)) {
-                $this->output("⚠️  Directory does not exist: $dir");
-                continue;
+        /**
+         * Output message with proper line break based on environment
+         */
+        private function output($message) {
+            if ($this->isCLI) {
+                echo $message . "\n";
+            } else {
+                echo htmlspecialchars($message) . "<br>\n";
             }
-            $this->scanDirectory($dir);
         }
-        $this->output("   Found " . count($this->files) . " PHP files");
-        $this->output("");
-    }
 
-    private function scanDirectory($dir) {
-        $items = scandir($dir);
-        foreach ($items as $item) {
-            if ($item === '.' || $item === '..') continue;
+        private function validateSettings() {
+            if (empty($this->settings['directories'])) {
+                $this->output("❌ Missing 'directories' in settings!");
+                exit(1);
+            }
+            if (empty($this->settings['output_dir'])) {
+                $this->settings['output_dir'] = 'output';
+            }
+        }
 
-            $path = $dir . DIRECTORY_SEPARATOR . $item;
+        public function generate() {
+            $this->output("🚀 Starting phpDocGenerator v" . self::VERSION . "...");
+            $this->output("");
 
-            if (is_dir($path)) {
-                $skip = false;
-                if (!empty($this->settings['exclude_dirs'])) {
-                    foreach ($this->settings['exclude_dirs'] as $exclude) {
-                        if (strpos($path, $exclude) !== false) {
-                            $skip = true;
-                            break;
+            $this->scanDirectories();
+            $this->baseDir = $this->findCommonBasePath();
+            $this->parseFiles();
+            $this->buildFileTree();
+            $this->createOutputStructure();
+            $this->generateHTMLFiles();
+            $this->generateDirectoryIndexes();
+            $this->generateMainIndex();
+            $this->createHtaccess();
+
+            $this->output("");
+            $this->output("✅ Done! Open {$this->settings['output_dir']}/index.html in your browser.");
+        }
+
+        private function scanDirectories() {
+            $this->output("📂 Scanning directories...");
+            foreach ($this->settings['directories'] as $dir) {
+                if (!is_dir($dir)) {
+                    $this->output("⚠️  Directory does not exist: $dir");
+                    continue;
+                }
+                $this->scanDirectory($dir);
+            }
+            $this->output("   Found " . count($this->files) . " PHP files");
+            $this->output("");
+        }
+
+        private function scanDirectory($dir) {
+            $items = scandir($dir);
+            foreach ($items as $item) {
+                if ($item === '.' || $item === '..') continue;
+
+                $path = $dir . DIRECTORY_SEPARATOR . $item;
+
+                if (is_dir($path)) {
+                    $skip = false;
+                    if (!empty($this->settings['exclude_dirs'])) {
+                        foreach ($this->settings['exclude_dirs'] as $exclude) {
+                            if (strpos($path, $exclude) !== false) {
+                                $skip = true;
+                                break;
+                            }
                         }
                     }
+                    if (!$skip) {
+                        $this->scanDirectory($path);
+                    }
+                } elseif (pathinfo($path, PATHINFO_EXTENSION) === 'php') {
+                    $this->files[] = $path;
                 }
-                if (!$skip) {
-                    $this->scanDirectory($path);
-                }
-            } elseif (pathinfo($path, PATHINFO_EXTENSION) === 'php') {
-                $this->files[] = $path;
-            }
-        }
-    }
-
-    private function findCommonBasePath() {
-        $paths = [];
-        foreach ($this->settings['directories'] as $dir) {
-            $realPath = realpath($dir);
-            if ($realPath) {
-                $paths[] = $realPath;
             }
         }
 
-        if (empty($paths)) {
+        private function findCommonBasePath() {
+            $paths = [];
+            foreach ($this->settings['directories'] as $dir) {
+                $realPath = realpath($dir);
+                if ($realPath) {
+                    $paths[] = $realPath;
+                }
+            }
+
+            if (empty($paths)) {
+                return '';
+            }
+
+            $commonPath = $paths[0];
+            foreach ($paths as $path) {
+                while (strpos($path, $commonPath) !== 0) {
+                    $commonPath = dirname($commonPath);
+                }
+            }
+
+            return $commonPath;
+        }
+
+        private function parseFiles() {
+            $this->output("🔍 Analyzing PHP files...");
+            foreach ($this->files as $file) {
+                $this->documentation[$file] = $this->parseFile($file);
+            }
+        }
+
+        private function parseFile($file) {
+            $content = file_get_contents($file);
+            $tokens = token_get_all($content);
+
+            $doc = [
+                'file' => $file,
+                'classes' => [],
+                'functions' => [],
+                'constants' => []
+            ];
+
+            $currentClass = null;
+            $currentComment = null;
+
+            for ($i = 0; $i < count($tokens); $i++) {
+                $token = $tokens[$i];
+
+                if (is_array($token) && $token[0] === T_DOC_COMMENT) {
+                    $currentComment = $this->parseDocBlock($token[1]);
+                }
+
+                if (is_array($token) && $token[0] === T_CLASS) {
+                    $className = $this->getNextToken($tokens, $i, T_STRING);
+                    $doc['classes'][$className] = [
+                        'name' => $className,
+                        'comment' => $currentComment,
+                        'methods' => [],
+                        'properties' => []
+                    ];
+                    $currentClass = $className;
+                    $this->allClasses[] = ['name' => $className, 'file' => $file];
+                    $currentComment = null;
+                }
+
+                if (is_array($token) && $token[0] === T_FUNCTION) {
+                    $functionName = $this->getNextToken($tokens, $i, T_STRING);
+                    $params = $this->extractParameters($tokens, $i);
+
+                    $functionData = [
+                        'name' => $functionName,
+                        'comment' => $currentComment,
+                        'parameters' => $params
+                    ];
+
+                    if ($currentClass) {
+                        $doc['classes'][$currentClass]['methods'][] = $functionData;
+                    } else {
+                        $doc['functions'][] = $functionData;
+                        $this->allFunctions[] = ['name' => $functionName, 'file' => $file];
+                    }
+                    $currentComment = null;
+                }
+
+                if (is_array($token) && $token[0] === T_CONST) {
+                    $constName = $this->getNextToken($tokens, $i, T_STRING);
+                    $doc['constants'][] = [
+                        'name' => $constName,
+                        'comment' => $currentComment
+                    ];
+                    $currentComment = null;
+                }
+            }
+
+            return $doc;
+        }
+
+        private function parseDocBlock($comment) {
+            $lines = explode("\n", $comment);
+            $parsed = [
+                'description' => '',
+                'params' => [],
+                'return' => '',
+                'tags' => []
+            ];
+
+            $description = [];
+            foreach ($lines as $line) {
+                $line = trim($line, " \t\n\r\0\x0B*/");
+
+                if (preg_match('/@param\s+(\S+)\s+\$(\S+)\s*(.*)/', $line, $matches)) {
+                    $parsed['params'][] = [
+                        'type' => $matches[1],
+                        'name' => $matches[2],
+                        'description' => $matches[3] ?? ''
+                    ];
+                } elseif (preg_match('/@return\s+(\S+)\s*(.*)/', $line, $matches)) {
+                    $parsed['return'] = $matches[1] . ' ' . ($matches[2] ?? '');
+                } elseif (preg_match('/@(\w+)\s*(.*)/', $line, $matches)) {
+                    $parsed['tags'][$matches[1]] = $matches[2];
+                } elseif (!empty($line)) {
+                    $description[] = $line;
+                }
+            }
+
+            $parsed['description'] = implode(' ', $description);
+            return $parsed;
+        }
+
+        private function getNextToken($tokens, $startIndex, $type) {
+            for ($i = $startIndex + 1; $i < count($tokens); $i++) {
+                if (is_array($tokens[$i]) && $tokens[$i][0] === $type) {
+                    return $tokens[$i][1];
+                }
+            }
             return '';
         }
 
-        $commonPath = $paths[0];
-        foreach ($paths as $path) {
-            while (strpos($path, $commonPath) !== 0) {
-                $commonPath = dirname($commonPath);
-            }
-        }
+        private function extractParameters($tokens, $startIndex) {
+            $params = [];
+            $inParams = false;
+            $currentParam = '';
 
-        return $commonPath;
-    }
-
-    private function parseFiles() {
-        $this->output("🔍 Analyzing PHP files...");
-        foreach ($this->files as $file) {
-            $this->documentation[$file] = $this->parseFile($file);
-        }
-    }
-
-    private function parseFile($file) {
-        $content = file_get_contents($file);
-        $tokens = token_get_all($content);
-
-        $doc = [
-            'file' => $file,
-            'classes' => [],
-            'functions' => [],
-            'constants' => []
-        ];
-
-        $currentClass = null;
-        $currentComment = null;
-
-        for ($i = 0; $i < count($tokens); $i++) {
-            $token = $tokens[$i];
-
-            if (is_array($token) && $token[0] === T_DOC_COMMENT) {
-                $currentComment = $this->parseDocBlock($token[1]);
-            }
-
-            if (is_array($token) && $token[0] === T_CLASS) {
-                $className = $this->getNextToken($tokens, $i, T_STRING);
-                $doc['classes'][$className] = [
-                    'name' => $className,
-                    'comment' => $currentComment,
-                    'methods' => [],
-                    'properties' => []
-                ];
-                $currentClass = $className;
-                $this->allClasses[] = ['name' => $className, 'file' => $file];
-                $currentComment = null;
-            }
-
-            if (is_array($token) && $token[0] === T_FUNCTION) {
-                $functionName = $this->getNextToken($tokens, $i, T_STRING);
-                $params = $this->extractParameters($tokens, $i);
-
-                $functionData = [
-                    'name' => $functionName,
-                    'comment' => $currentComment,
-                    'parameters' => $params
-                ];
-
-                if ($currentClass) {
-                    $doc['classes'][$currentClass]['methods'][] = $functionData;
-                } else {
-                    $doc['functions'][] = $functionData;
-                    $this->allFunctions[] = ['name' => $functionName, 'file' => $file];
+            for ($i = $startIndex; $i < count($tokens); $i++) {
+                if ($tokens[$i] === '(') {
+                    $inParams = true;
+                    continue;
                 }
-                $currentComment = null;
-            }
-
-            if (is_array($token) && $token[0] === T_CONST) {
-                $constName = $this->getNextToken($tokens, $i, T_STRING);
-                $doc['constants'][] = [
-                    'name' => $constName,
-                    'comment' => $currentComment
-                ];
-                $currentComment = null;
-            }
-        }
-
-        return $doc;
-    }
-
-    private function parseDocBlock($comment) {
-        $lines = explode("\n", $comment);
-        $parsed = [
-            'description' => '',
-            'params' => [],
-            'return' => '',
-            'tags' => []
-        ];
-
-        $description = [];
-        foreach ($lines as $line) {
-            $line = trim($line, " \t\n\r\0\x0B*/");
-
-            if (preg_match('/@param\s+(\S+)\s+\$(\S+)\s*(.*)/', $line, $matches)) {
-                $parsed['params'][] = [
-                    'type' => $matches[1],
-                    'name' => $matches[2],
-                    'description' => $matches[3] ?? ''
-                ];
-            } elseif (preg_match('/@return\s+(\S+)\s*(.*)/', $line, $matches)) {
-                $parsed['return'] = $matches[1] . ' ' . ($matches[2] ?? '');
-            } elseif (preg_match('/@(\w+)\s*(.*)/', $line, $matches)) {
-                $parsed['tags'][$matches[1]] = $matches[2];
-            } elseif (!empty($line)) {
-                $description[] = $line;
-            }
-        }
-
-        $parsed['description'] = implode(' ', $description);
-        return $parsed;
-    }
-
-    private function getNextToken($tokens, $startIndex, $type) {
-        for ($i = $startIndex + 1; $i < count($tokens); $i++) {
-            if (is_array($tokens[$i]) && $tokens[$i][0] === $type) {
-                return $tokens[$i][1];
-            }
-        }
-        return '';
-    }
-
-    private function extractParameters($tokens, $startIndex) {
-        $params = [];
-        $inParams = false;
-        $currentParam = '';
-
-        for ($i = $startIndex; $i < count($tokens); $i++) {
-            if ($tokens[$i] === '(') {
-                $inParams = true;
-                continue;
-            }
-            if ($tokens[$i] === ')') {
-                if (!empty($currentParam)) {
-                    $params[] = trim($currentParam);
+                if ($tokens[$i] === ')') {
+                    if (!empty($currentParam)) {
+                        $params[] = trim($currentParam);
+                    }
+                    break;
                 }
-                break;
+                if ($inParams) {
+                    if ($tokens[$i] === ',') {
+                        $params[] = trim($currentParam);
+                        $currentParam = '';
+                    } else {
+                        $currentParam .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+                    }
+                }
             }
-            if ($inParams) {
-                if ($tokens[$i] === ',') {
-                    $params[] = trim($currentParam);
-                    $currentParam = '';
-                } else {
-                    $currentParam .= is_array($tokens[$i]) ? $tokens[$i][1] : $tokens[$i];
+
+            return $params;
+        }
+
+        private function buildFileTree() {
+            $this->output("🌳 Building tree structure...");
+
+            foreach ($this->files as $file) {
+                $relativePath = $this->getRelativePath($file);
+
+                if ($this->fileExistsInTree($relativePath)) {
+                    continue;
+                }
+
+                $parts = explode('/', $relativePath);
+
+                $current = &$this->fileTree;
+                foreach ($parts as $index => $part) {
+                    if ($index === count($parts) - 1) {
+                        if (!isset($current['files'])) {
+                            $current['files'] = [];
+                        }
+                        if (!in_array($part, $current['files'])) {
+                            $current['files'][] = $part;
+                        }
+                    } else {
+                        if (!isset($current['dirs'][$part])) {
+                            $current['dirs'][$part] = ['dirs' => [], 'files' => []];
+                        }
+                        $current = &$current['dirs'][$part];
+                    }
                 }
             }
         }
 
-        return $params;
-    }
-
-    private function buildFileTree() {
-        $this->output("🌳 Building tree structure...");
-
-        foreach ($this->files as $file) {
-            $relativePath = $this->getRelativePath($file);
-
-            if ($this->fileExistsInTree($relativePath)) {
-                continue;
-            }
-
+        private function fileExistsInTree($relativePath) {
             $parts = explode('/', $relativePath);
+            $current = $this->fileTree;
 
-            $current = &$this->fileTree;
             foreach ($parts as $index => $part) {
                 if ($index === count($parts) - 1) {
-                    if (!isset($current['files'])) {
-                        $current['files'] = [];
-                    }
-                    if (!in_array($part, $current['files'])) {
-                        $current['files'][] = $part;
-                    }
+                    return isset($current['files']) && in_array($part, $current['files']);
                 } else {
                     if (!isset($current['dirs'][$part])) {
-                        $current['dirs'][$part] = ['dirs' => [], 'files' => []];
+                        return false;
                     }
-                    $current = &$current['dirs'][$part];
+                    $current = $current['dirs'][$part];
+                }
+            }
+
+            return false;
+        }
+
+        private function getRelativePath($file) {
+            $file = realpath($file);
+
+            if ($this->baseDir && $file && strpos($file, $this->baseDir) === 0) {
+                return str_replace('\\', '/', substr($file, strlen($this->baseDir) + 1));
+            }
+
+            return basename($file);
+        }
+
+        private function createOutputStructure() {
+            $this->output("📁 Creating directory structure...");
+
+            if (!file_exists($this->settings['output_dir'])) {
+                mkdir($this->settings['output_dir'], 0755, true);
+            }
+
+            foreach ($this->files as $file) {
+                $relativePath = $this->getRelativePath($file);
+                $outputPath = $this->settings['output_dir'] . '/' . dirname($relativePath);
+
+                if (!file_exists($outputPath)) {
+                    mkdir($outputPath, 0755, true);
                 }
             }
         }
-    }
 
-    private function fileExistsInTree($relativePath) {
-        $parts = explode('/', $relativePath);
-        $current = $this->fileTree;
+        private function generateHTMLFiles() {
+            $this->output("📄 Generating HTML files...");
 
-        foreach ($parts as $index => $part) {
-            if ($index === count($parts) - 1) {
-                return isset($current['files']) && in_array($part, $current['files']);
-            } else {
-                if (!isset($current['dirs'][$part])) {
-                    return false;
-                }
-                $current = $current['dirs'][$part];
-            }
-        }
+            foreach ($this->documentation as $file => $doc) {
+                $relativePath = $this->getRelativePath($file);
+                $outputFile = $this->settings['output_dir'] . '/' . $relativePath . '.html';
 
-        return false;
-    }
-
-    private function getRelativePath($file) {
-        $file = realpath($file);
-
-        if ($this->baseDir && $file && strpos($file, $this->baseDir) === 0) {
-            return str_replace('\\', '/', substr($file, strlen($this->baseDir) + 1));
-        }
-
-        return basename($file);
-    }
-
-    private function createOutputStructure() {
-        $this->output("📁 Creating directory structure...");
-
-        if (!file_exists($this->settings['output_dir'])) {
-            mkdir($this->settings['output_dir'], 0755, true);
-        }
-
-        foreach ($this->files as $file) {
-            $relativePath = $this->getRelativePath($file);
-            $outputPath = $this->settings['output_dir'] . '/' . dirname($relativePath);
-
-            if (!file_exists($outputPath)) {
-                mkdir($outputPath, 0755, true);
-            }
-        }
-    }
-
-    private function generateHTMLFiles() {
-        $this->output("📄 Generating HTML files...");
-
-        foreach ($this->documentation as $file => $doc) {
-            $relativePath = $this->getRelativePath($file);
-            $outputFile = $this->settings['output_dir'] . '/' . $relativePath . '.html';
-
-            $html = $this->generateFileHTML($file, $doc, $relativePath);
-            file_put_contents($outputFile, $html);
-        }
-    }
-
-    private function generateFileHTML($file, $doc, $relativePath) {
-        $depth = substr_count($relativePath, '/');
-        $rootPath = $depth > 0 ? str_repeat('../', $depth) : '';
-
-        $header = $this->generateHeader($rootPath);
-        $breadcrumb = $this->generateBreadcrumb($relativePath, $rootPath);
-        $searchBox = '<input type="text" id="search" placeholder="' . $this->lang['GENERATOR_SEARCH_PLACEHOLDER'] . '" class="search-box">';
-        $content = $this->generateFileContent($file, $doc);
-
-        return $this->getHTMLTemplate(basename($file), $header . $breadcrumb . $searchBox . $content, 'file', $rootPath);
-    }
-
-    private function generateBreadcrumb($path, $rootPath = '') {
-        $parts = explode('/', $path);
-        $breadcrumb = '<div class="breadcrumb">';
-        $breadcrumb .= '<a href="' . $rootPath . 'index.html">' . $this->lang['GENERATOR_HOME'] . '</a>';
-
-        $currentPath = '';
-        foreach ($parts as $index => $part) {
-            if ($index === count($parts) - 1) {
-                $breadcrumb .= ' <span class="separator">›</span> <span class="current">' . htmlspecialchars($part) . '</span>';
-            } else {
-                $currentPath .= ($currentPath ? '/' : '') . $part;
-                $breadcrumb .= ' <span class="separator">›</span> <a href="' . $rootPath . $currentPath . '/index.html">' . htmlspecialchars($part) . '</a>';
-            }
-        }
-
-        $breadcrumb .= '</div>';
-        return $breadcrumb;
-    }
-
-    private function generateHeader($rootPath = '') {
-        $html = "<div class='header-main'>\n";
-        $html .= "<div class='logo'>\n";
-        $html .= "<a href='{$rootPath}index.html'><img src='https://contentigniter.kukis.sk/phpDoc/phpdoc-app-logo.png' alt='phpDOC'></a>\n";
-        $html .= "<small>v" . self::VERSION . "</small>\n";
-        $html .= "</div>\n";
-        
-        // Language picker
-        $html .= $this->generateLanguagePicker();
-        
-        $html .= "<div class='stats-header'>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->files) . "</span><span class='stat-label' data-i18n='GENERATOR_FILES'>" . $this->lang['GENERATOR_FILES'] . "</span></div>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allClasses) . "</span><span class='stat-label' data-i18n='GENERATOR_CLASSES'>" . $this->lang['GENERATOR_CLASSES'] . "</span></div>\n";
-        $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allFunctions) . "</span><span class='stat-label' data-i18n='GENERATOR_FUNCTIONS'>" . $this->lang['GENERATOR_FUNCTIONS'] . "</span></div>\n";
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-
-        return $html;
-    }
-
-    private function generateLanguagePicker() {
-        $currentLang = $this->settings['language'];
-        $currentLangData = $this->languages[$currentLang];
-        
-        $html = "<div class='language-picker'>\n";
-        $html .= "<div class='lang-current' onclick='toggleLanguagePicker()'>\n";
-        $html .= $currentLangData['flag'];
-        $html .= "<span class='lang-name'>" . htmlspecialchars($currentLangData['native']) . "</span>\n";
-        $html .= "<span class='lang-arrow'>▼</span>\n";
-        $html .= "</div>\n";
-        $html .= "<div class='lang-dropdown' id='langDropdown' style='display:none;'>\n";
-        
-        foreach ($this->settings['available_languages'] as $code) {
-            if ($code === $currentLang) continue;
-            if (!isset($this->languages[$code])) continue;
-            
-            $langData = $this->languages[$code];
-            $html .= "<div class='lang-option' onclick='changeLang(\"$code\")'>\n";
-            $html .= $langData['flag'];
-            $html .= "<span class='lang-name'>" . htmlspecialchars($langData['native']) . "</span>\n";
-            $html .= "</div>\n";
-        }
-        
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-        
-        return $html;
-    }
-
-    private function generateFileContent($file, $doc) {
-        $html = "<div class='file-header'>\n";
-        $html .= "<h1>" . $this->getFileIcon() . " " . htmlspecialchars(basename($file)) . "</h1>\n";
-        $html .= "<div class='file-path'>" . htmlspecialchars($file) . "</div>\n";
-        $html .= "</div>\n";
-
-        foreach ($doc['classes'] as $class) {
-            $html .= "<div class='class'>\n";
-            $html .= "<h2><span class='keyword' data-i18n='GENERATOR_CLASS'>" . $this->lang['GENERATOR_CLASS'] . "</span> <span class='class-name'>" . htmlspecialchars($class['name']) . "</span></h2>\n";
-
-            if ($class['comment'] && !empty($class['comment']['description'])) {
-                $html .= "<div class='description'>" . htmlspecialchars($class['comment']['description']) . "</div>\n";
-            }
-
-            if (!empty($class['methods'])) {
-                $html .= "<div class='methods-list'>\n";
-                foreach ($class['methods'] as $index => $method) {
-                    $html .= $this->generateMethodHTML($method, $index);
-                }
-                $html .= "</div>\n";
-            }
-
-            $html .= "</div>\n";
-        }
-
-        foreach ($doc['functions'] as $index => $function) {
-            $html .= $this->generateFunctionHTML($function, $index);
-        }
-
-        return $html;
-    }
-
-    private function generateMethodHTML($method, $index) {
-        $id = 'method-' . $index;
-        $params = !empty($method['parameters']) ? '(' . htmlspecialchars(implode(', ', $method['parameters'])) . ')' : '()';
-
-        $html = "<div class='method-item'>\n";
-        $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
-        $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
-        $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($method['name']) . "</span>";
-        $html .= "<span class='params-preview'>" . $params . "</span>\n";
-        $html .= "</div>\n";
-
-        $html .= "<div class='method-details' id='$id' style='display:none;'>\n";
-
-        if ($method['comment'] && !empty($method['comment']['description'])) {
-            $html .= "<div class='description'>" . htmlspecialchars($method['comment']['description']) . "</div>\n";
-        }
-
-        if ($method['comment'] && !empty($method['comment']['params'])) {
-            $html .= "<div class='parameters'><strong data-i18n='GENERATOR_PARAMETERS'>" . $this->lang['GENERATOR_PARAMETERS'] . ":</strong>\n";
-            foreach ($method['comment']['params'] as $param) {
-                $html .= "<div class='param'><span class='type'>" . htmlspecialchars($param['type']) . "</span> ";
-                $html .= "<span class='var'>\$" . htmlspecialchars($param['name']) . "</span>";
-                if (!empty($param['description'])) {
-                    $html .= " <span class='param-desc'>- " . htmlspecialchars($param['description']) . "</span>";
-                }
-                $html .= "</div>\n";
-            }
-            $html .= "</div>\n";
-        }
-
-        if ($method['comment'] && !empty($method['comment']['return'])) {
-            $html .= "<div class='return'><span class='keyword' data-i18n='GENERATOR_RETURN'>" . $this->lang['GENERATOR_RETURN'] . "</span> " . htmlspecialchars($method['comment']['return']) . "</div>\n";
-        }
-
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-
-        return $html;
-    }
-
-    private function generateFunctionHTML($function, $index) {
-        $id = 'func-' . $index;
-        $params = !empty($function['parameters']) ? '(' . htmlspecialchars(implode(', ', $function['parameters'])) . ')' : '()';
-
-        $html = "<div class='function'>\n";
-        $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
-        $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
-        $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($function['name']) . "</span>";
-        $html .= "<span class='params-preview'>" . $params . "</span>\n";
-        $html .= "</div>\n";
-
-        $html .= "<div class='method-details' id='$id' style='display:none;'>\n";
-
-        if ($function['comment'] && !empty($function['comment']['description'])) {
-            $html .= "<div class='description'>" . htmlspecialchars($function['comment']['description']) . "</div>\n";
-        }
-
-        $html .= "</div>\n";
-        $html .= "</div>\n";
-
-        return $html;
-    }
-
-    private function generateDirectoryIndexes() {
-        $this->output("📂 Generating directory indexes...");
-        $this->generateDirIndex($this->fileTree, '');
-    }
-
-    private function generateDirIndex($tree, $path) {
-        if (!empty($tree['dirs'])) {
-            foreach ($tree['dirs'] as $dirName => $subTree) {
-                $dirPath = $path ? $path . '/' . $dirName : $dirName;
-                $outputFile = $this->settings['output_dir'] . '/' . $dirPath . '/index.html';
-
-                $depth = substr_count($dirPath, '/') + 1;
-                $rootPath = str_repeat('../', $depth);
-
-                $header = $this->generateHeader($rootPath);
-                $breadcrumb = $this->generateBreadcrumb($dirPath, $rootPath);
-                $treeHtml = $this->generateTreeHTML($subTree);
-                $content = $header . $breadcrumb . "<div class='directory-index'><h1>" . $this->getFolderIcon() . " " . htmlspecialchars($dirName) . "</h1>" . $treeHtml . "</div>";
-
-                $html = $this->getHTMLTemplate($dirName, $content, 'directory', $rootPath);
+                $html = $this->generateFileHTML($file, $doc, $relativePath);
                 file_put_contents($outputFile, $html);
-
-                $this->generateDirIndex($subTree, $dirPath);
             }
         }
-    }
 
-    private function generateTreeHTML($tree) {
-        $html = "<div class='tree'>\n";
+        private function generateFileHTML($file, $doc, $relativePath) {
+            $depth = substr_count($relativePath, '/');
+            $rootPath = $depth > 0 ? str_repeat('../', $depth) : '';
 
-        if (!empty($tree['dirs'])) {
-            ksort($tree['dirs']);
-            foreach ($tree['dirs'] as $dirName => $subTree) {
-                $html .= "<div class='tree-item'>\n";
-                $html .= $this->getFolderIcon() . " <a href='" . htmlspecialchars($dirName) . "/index.html'>" . htmlspecialchars($dirName) . "</a>\n";
+            $header = $this->generateHeader($rootPath);
+            $breadcrumb = $this->generateBreadcrumb($relativePath, $rootPath);
+            $searchBox = '<input type="text" id="search" placeholder="' . $this->lang['GENERATOR_SEARCH_PLACEHOLDER'] . '" class="search-box">';
+            $content = $this->generateFileContent($file, $doc);
+
+            return $this->getHTMLTemplate(basename($file), $header . $breadcrumb . $searchBox . $content, 'file', $rootPath);
+        }
+
+        private function generateBreadcrumb($path, $rootPath = '') {
+            $parts = explode('/', $path);
+            $breadcrumb = '<div class="breadcrumb">';
+            $breadcrumb .= '<a href="' . $rootPath . 'index.html">' . $this->lang['GENERATOR_HOME'] . '</a>';
+
+            $currentPath = '';
+            foreach ($parts as $index => $part) {
+                if ($index === count($parts) - 1) {
+                    $breadcrumb .= ' <span class="separator">›</span> <span class="current">' . htmlspecialchars($part) . '</span>';
+                } else {
+                    $currentPath .= ($currentPath ? '/' : '') . $part;
+                    $breadcrumb .= ' <span class="separator">›</span> <a href="' . $rootPath . $currentPath . '/index.html">' . htmlspecialchars($part) . '</a>';
+                }
+            }
+
+            $breadcrumb .= '</div>';
+            return $breadcrumb;
+        }
+
+        private function generateHeader($rootPath = '') {
+            $html = "<div class='header-main'>\n";
+            $html .= "<div class='logo'>\n";
+            $html .= "<a href='{$rootPath}index.html'><img src='data:image/png;base64,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' alt='phpDOC'></a>\n";
+            $html .= "<small>v" . self::VERSION . "</small>\n";
+            $html .= "</div>\n";
+
+            // Language picker
+            $html .= $this->generateLanguagePicker();
+
+            $html .= "<div class='stats-header'>\n";
+            $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->files) . "</span><span class='stat-label' data-i18n='GENERATOR_FILES'>" . $this->lang['GENERATOR_FILES'] . "</span></div>\n";
+            $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allClasses) . "</span><span class='stat-label' data-i18n='GENERATOR_CLASSES'>" . $this->lang['GENERATOR_CLASSES'] . "</span></div>\n";
+            $html .= "<div class='stat-item'><span class='stat-number'>" . count($this->allFunctions) . "</span><span class='stat-label' data-i18n='GENERATOR_FUNCTIONS'>" . $this->lang['GENERATOR_FUNCTIONS'] . "</span></div>\n";
+            $html .= "</div>\n";
+            $html .= "</div>\n";
+
+            return $html;
+        }
+
+        private function generateLanguagePicker() {
+            $currentLang = $this->settings['language'];
+            $currentLangData = $this->languages[$currentLang];
+
+            $html = "<div class='language-picker'>\n";
+            $html .= "<div class='lang-current' onclick='toggleLanguagePicker()'>\n";
+            $html .= $currentLangData['flag'];
+            $html .= "<span class='lang-name'>" . htmlspecialchars($currentLangData['native']) . "</span>\n";
+            $html .= "<span class='lang-arrow'>▼</span>\n";
+            $html .= "</div>\n";
+            $html .= "<div class='lang-dropdown' id='langDropdown' style='display:none;'>\n";
+
+            foreach ($this->settings['available_languages'] as $code) {
+                if ($code === $currentLang) continue;
+                if (!isset($this->languages[$code])) continue;
+
+                $langData = $this->languages[$code];
+                $html .= "<div class='lang-option' onclick='changeLang(\"$code\")'>\n";
+                $html .= $langData['flag'];
+                $html .= "<span class='lang-name'>" . htmlspecialchars($langData['native']) . "</span>\n";
                 $html .= "</div>\n";
             }
+
+            $html .= "</div>\n";
+            $html .= "</div>\n";
+
+            return $html;
         }
 
-        if (!empty($tree['files'])) {
-            sort($tree['files']);
-            foreach ($tree['files'] as $fileName) {
-                $html .= "<div class='tree-item'>\n";
-                $html .= $this->getFileIcon() . " <a href='" . htmlspecialchars($fileName) . ".html'>" . htmlspecialchars($fileName) . "</a>\n";
+        private function generateFileContent($file, $doc) {
+            $html = "<div class='file-header'>\n";
+            $html .= "<h1>" . $this->getFileIcon() . " " . htmlspecialchars(basename($file)) . "</h1>\n";
+            $html .= "<div class='file-path'>" . htmlspecialchars($file) . "</div>\n";
+            $html .= "</div>\n";
+
+            foreach ($doc['classes'] as $class) {
+                $html .= "<div class='class'>\n";
+                $html .= "<h2><span class='keyword' data-i18n='GENERATOR_CLASS'>" . $this->lang['GENERATOR_CLASS'] . "</span> <span class='class-name'>" . htmlspecialchars($class['name']) . "</span></h2>\n";
+
+                if ($class['comment'] && !empty($class['comment']['description'])) {
+                    $html .= "<div class='description'>" . htmlspecialchars($class['comment']['description']) . "</div>\n";
+                }
+
+                if (!empty($class['methods'])) {
+                    $html .= "<div class='methods-list'>\n";
+                    foreach ($class['methods'] as $index => $method) {
+                        $html .= $this->generateMethodHTML($method, $index);
+                    }
+                    $html .= "</div>\n";
+                }
+
                 $html .= "</div>\n";
             }
+
+            foreach ($doc['functions'] as $index => $function) {
+                $html .= $this->generateFunctionHTML($function, $index);
+            }
+
+            return $html;
         }
 
-        $html .= "</div>\n";
-        return $html;
-    }
+        private function generateMethodHTML($method, $index) {
+            $id = 'method-' . $index;
+            $params = !empty($method['parameters']) ? '(' . htmlspecialchars(implode(', ', $method['parameters'])) . ')' : '()';
 
-    private function generateMainIndex() {
-        $this->output("🏠 Generating main index.html...");
+            $html = "<div class='method-item'>\n";
+            $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
+            $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
+            $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($method['name']) . "</span>";
+            $html .= "<span class='params-preview'>" . $params . "</span>\n";
+            $html .= "</div>\n";
 
-        $header = $this->generateHeader('');
+            $html .= "<div class='method-details' id='$id' style='display:none;'>\n";
 
-        $content = "<div class='main-tree'>\n";
-        $content .= "<h2 data-i18n='GENERATOR_PROJECT_STRUCTURE'>" . $this->lang['GENERATOR_PROJECT_STRUCTURE'] . "</h2>\n";
-        $content .= $this->generateFullTreeHTML($this->fileTree, '');
-        $content .= "</div>\n";
+            if ($method['comment'] && !empty($method['comment']['description'])) {
+                $html .= "<div class='description'>" . htmlspecialchars($method['comment']['description']) . "</div>\n";
+            }
 
-        $html = $this->getHTMLTemplate('phpDocGenerator', $header . $content, 'main', '');
-        file_put_contents($this->settings['output_dir'] . '/index.html', $html);
-    }
-
-    private function generateFullTreeHTML($tree, $path) {
-        $html = "<div class='tree'>\n";
-
-        if (!empty($tree['dirs'])) {
-            ksort($tree['dirs']);
-            foreach ($tree['dirs'] as $dirName => $subTree) {
-                $dirPath = $path ? $path . '/' . $dirName : $dirName;
-                $html .= "<div class='tree-item tree-dir'>\n";
-                $html .= "<span class='folder-toggle' onclick='toggleFolder(this)'>▶</span> ";
-                $html .= $this->getFolderIcon() . " <a href='" . htmlspecialchars($dirPath) . "/index.html'>" . htmlspecialchars($dirName) . "</a>\n";
-                $html .= "<div class='tree-children' style='display:none;'>" . $this->generateFullTreeHTML($subTree, $dirPath) . "</div>";
+            if ($method['comment'] && !empty($method['comment']['params'])) {
+                $html .= "<div class='parameters'><strong data-i18n='GENERATOR_PARAMETERS'>" . $this->lang['GENERATOR_PARAMETERS'] . ":</strong>\n";
+                foreach ($method['comment']['params'] as $param) {
+                    $html .= "<div class='param'><span class='type'>" . htmlspecialchars($param['type']) . "</span> ";
+                    $html .= "<span class='var'>\$" . htmlspecialchars($param['name']) . "</span>";
+                    if (!empty($param['description'])) {
+                        $html .= " <span class='param-desc'>- " . htmlspecialchars($param['description']) . "</span>";
+                    }
+                    $html .= "</div>\n";
+                }
                 $html .= "</div>\n";
             }
+
+            if ($method['comment'] && !empty($method['comment']['return'])) {
+                $html .= "<div class='return'><span class='keyword' data-i18n='GENERATOR_RETURN'>" . $this->lang['GENERATOR_RETURN'] . "</span> " . htmlspecialchars($method['comment']['return']) . "</div>\n";
+            }
+
+            $html .= "</div>\n";
+            $html .= "</div>\n";
+
+            return $html;
         }
 
-        if (!empty($tree['files'])) {
-            sort($tree['files']);
-            foreach ($tree['files'] as $fileName) {
-                $filePath = $path ? $path . '/' . $fileName : $fileName;
-                $html .= "<div class='tree-item tree-file'>\n";
-                $html .= $this->getFileIcon() . " <a href='" . htmlspecialchars($filePath) . ".html'>" . htmlspecialchars($fileName) . "</a>\n";
-                $html .= "</div>\n";
+        private function generateFunctionHTML($function, $index) {
+            $id = 'func-' . $index;
+            $params = !empty($function['parameters']) ? '(' . htmlspecialchars(implode(', ', $function['parameters'])) . ')' : '()';
+
+            $html = "<div class='function'>\n";
+            $html .= "<div class='method-header' onclick='toggleMethod(\"$id\")'>\n";
+            $html .= "<span class='toggle-icon' id='icon-$id'>▶</span>\n";
+            $html .= "<span class='keyword' data-i18n='GENERATOR_FUNCTION'>" . $this->lang['GENERATOR_FUNCTION'] . "</span> <span class='function-name'>" . htmlspecialchars($function['name']) . "</span>";
+            $html .= "<span class='params-preview'>" . $params . "</span>\n";
+            $html .= "</div>\n";
+
+            $html .= "<div class='method-details' id='$id' style='display:none;'>\n";
+
+            if ($function['comment'] && !empty($function['comment']['description'])) {
+                $html .= "<div class='description'>" . htmlspecialchars($function['comment']['description']) . "</div>\n";
+            }
+
+            $html .= "</div>\n";
+            $html .= "</div>\n";
+
+            return $html;
+        }
+
+        private function generateDirectoryIndexes() {
+            $this->output("📂 Generating directory indexes...");
+            $this->generateDirIndex($this->fileTree, '');
+        }
+
+        private function generateDirIndex($tree, $path) {
+            if (!empty($tree['dirs'])) {
+                foreach ($tree['dirs'] as $dirName => $subTree) {
+                    $dirPath = $path ? $path . '/' . $dirName : $dirName;
+                    $outputFile = $this->settings['output_dir'] . '/' . $dirPath . '/index.html';
+
+                    $depth = substr_count($dirPath, '/') + 1;
+                    $rootPath = str_repeat('../', $depth);
+
+                    $header = $this->generateHeader($rootPath);
+                    $breadcrumb = $this->generateBreadcrumb($dirPath, $rootPath);
+                    $treeHtml = $this->generateTreeHTML($subTree);
+                    $content = $header . $breadcrumb . "<div class='directory-index'><h1>" . $this->getFolderIcon() . " " . htmlspecialchars($dirName) . "</h1>" . $treeHtml . "</div>";
+
+                    $html = $this->getHTMLTemplate($dirName, $content, 'directory', $rootPath);
+                    file_put_contents($outputFile, $html);
+
+                    $this->generateDirIndex($subTree, $dirPath);
+                }
             }
         }
 
-        $html .= "</div>\n";
-        return $html;
-    }
+        private function generateTreeHTML($tree) {
+            $html = "<div class='tree'>\n";
 
-    private function getFolderIcon() {
-        return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19z"/></svg>';
-    }
-
-    private function getFileIcon() {
-        return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/><path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"/></svg>';
-    }
-
-    private function createHtaccess() {
-        $this->output("🔐 Creating .htaccess...");
-
-        $htaccess = '';
-
-        if (!empty($this->settings['http_auth'])) {
-            $htpasswdContent = '';
-            foreach ($this->settings['http_auth'] as $username => $password) {
-                $htpasswdContent .= $username . ':' . crypt($password, base64_encode($password)) . "\n";
+            if (!empty($tree['dirs'])) {
+                ksort($tree['dirs']);
+                foreach ($tree['dirs'] as $dirName => $subTree) {
+                    $html .= "<div class='tree-item'>\n";
+                    $html .= $this->getFolderIcon() . " <a href='" . htmlspecialchars($dirName) . "/index.html'>" . htmlspecialchars($dirName) . "</a>\n";
+                    $html .= "</div>\n";
+                }
             }
-            file_put_contents($this->settings['output_dir'] . '/.htpasswd', trim($htpasswdContent));
 
-            $htpasswdPath = realpath($this->settings['output_dir'] . '/.htpasswd');
+            if (!empty($tree['files'])) {
+                sort($tree['files']);
+                foreach ($tree['files'] as $fileName) {
+                    $html .= "<div class='tree-item'>\n";
+                    $html .= $this->getFileIcon() . " <a href='" . htmlspecialchars($fileName) . ".html'>" . htmlspecialchars($fileName) . "</a>\n";
+                    $html .= "</div>\n";
+                }
+            }
 
-            $htaccess = <<<HTACCESS
+            $html .= "</div>\n";
+            return $html;
+        }
+
+        private function generateMainIndex() {
+            $this->output("🏠 Generating main index.html...");
+
+            $header = $this->generateHeader('');
+
+            $content = "<div class='main-tree'>\n";
+            $content .= "<h2 data-i18n='GENERATOR_PROJECT_STRUCTURE'>" . $this->lang['GENERATOR_PROJECT_STRUCTURE'] . "</h2>\n";
+            $content .= $this->generateFullTreeHTML($this->fileTree, '');
+            $content .= "</div>\n";
+
+            $html = $this->getHTMLTemplate('phpDocGenerator', $header . $content, 'main', '');
+            file_put_contents($this->settings['output_dir'] . '/index.html', $html);
+        }
+
+        private function generateFullTreeHTML($tree, $path) {
+            $html = "<div class='tree'>\n";
+
+            if (!empty($tree['dirs'])) {
+                ksort($tree['dirs']);
+                foreach ($tree['dirs'] as $dirName => $subTree) {
+                    $dirPath = $path ? $path . '/' . $dirName : $dirName;
+                    $html .= "<div class='tree-item tree-dir'>\n";
+                    $html .= "<span class='folder-toggle' onclick='toggleFolder(this)'>▶</span> ";
+                    $html .= $this->getFolderIcon() . " <a href='" . htmlspecialchars($dirPath) . "/index.html'>" . htmlspecialchars($dirName) . "</a>\n";
+                    $html .= "<div class='tree-children' style='display:none;'>" . $this->generateFullTreeHTML($subTree, $dirPath) . "</div>";
+                    $html .= "</div>\n";
+                }
+            }
+
+            if (!empty($tree['files'])) {
+                sort($tree['files']);
+                foreach ($tree['files'] as $fileName) {
+                    $filePath = $path ? $path . '/' . $fileName : $fileName;
+                    $html .= "<div class='tree-item tree-file'>\n";
+                    $html .= $this->getFileIcon() . " <a href='" . htmlspecialchars($filePath) . ".html'>" . htmlspecialchars($fileName) . "</a>\n";
+                    $html .= "</div>\n";
+                }
+            }
+
+            $html .= "</div>\n";
+            return $html;
+        }
+
+        private function getFolderIcon() {
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19z"/></svg>';
+        }
+
+        private function getFileIcon() {
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/><path d="M8.646 6.646a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L10.293 9 8.646 7.354a.5.5 0 0 1 0-.708zm-1.292 0a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0 0 .708l2 2a.5.5 0 0 0 .708-.708L5.707 9l1.647-1.646a.5.5 0 0 0 0-.708z"/></svg>';
+        }
+
+        private function createHtaccess() {
+            $this->output("🔐 Creating .htaccess...");
+
+            $htaccess = '';
+
+            if (!empty($this->settings['http_auth'])) {
+                $htpasswdContent = '';
+                foreach ($this->settings['http_auth'] as $username => $password) {
+                    $htpasswdContent .= $username . ':' . crypt($password, base64_encode($password)) . "\n";
+                }
+                file_put_contents($this->settings['output_dir'] . '/.htpasswd', trim($htpasswdContent));
+
+                $htpasswdPath = realpath($this->settings['output_dir'] . '/.htpasswd');
+
+                $htaccess = <<<HTACCESS
 # HTTP Authentication
 AuthType Basic
 AuthName "phpDocGenerator - {$this->lang['GENERATOR_PROTECTED_AREA']}"
@@ -853,16 +853,16 @@ Require valid-user
 
 
 HTACCESS;
-            $this->output("   ✓ {$this->lang['GENERATOR_AUTH_ENABLED']}");
-            $this->output("   {$this->lang['GENERATOR_USERS']}:");
-            foreach ($this->settings['http_auth'] as $username => $password) {
-                $this->output("     - {$username}");
+                $this->output("   ✓ {$this->lang['GENERATOR_AUTH_ENABLED']}");
+                $this->output("   {$this->lang['GENERATOR_USERS']}:");
+                foreach ($this->settings['http_auth'] as $username => $password) {
+                    $this->output("     - {$username}");
+                }
+            } else {
+                $this->output("   ⚠   {$this->lang['GENERATOR_AUTH_DISABLED']}");
             }
-        } else {
-            $this->output("   ⚠   {$this->lang['GENERATOR_AUTH_DISABLED']}");
-        }
 
-        $htaccess .= <<<HTACCESS
+            $htaccess .= <<<HTACCESS
 # Block access to PHP files
 <FilesMatch "\\.php$">
     Order Allow,Deny
@@ -879,14 +879,16 @@ HTACCESS;
 DirectoryIndex index.html
 HTACCESS;
 
-        file_put_contents($this->settings['output_dir'] . '/.htaccess', $htaccess);
-    }
+            file_put_contents($this->settings['output_dir'] . '/.htaccess', $htaccess);
+        }
 
-    private function getHTMLTemplate($title, $content, $type, $rootPath = '') {
-        // Get translations as JSON for JavaScript
-        $translationsJson = json_encode($this->translations, JSON_UNESCAPED_UNICODE);
-        
-        return <<<HTML
+        private function getHTMLTemplate($title, $content, $type, $rootPath = '') {
+            // Get translations as JSON for JavaScript
+            $translationsJson = json_encode($this->translations, JSON_UNESCAPED_UNICODE);
+            $languagesJson = json_encode($this->languages, JSON_UNESCAPED_UNICODE);
+            $availableLanguagesJson = json_encode($this->settings['available_languages'], JSON_UNESCAPED_UNICODE);
+
+            return <<<HTML
 <!DOCTYPE html>
 <html lang="{$this->settings['language']}">
 <head>
@@ -1085,13 +1087,13 @@ HTACCESS;
         }
         .language-picker {
            position: absolute;
-			top: 45px; left: 152px;
+			top: 30px; left: 132px;
         }
         .lang-current {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 12px;
+            padding: 4px 8px 4px 2px;
             background: #1e1e1e;
             border: 1px solid #3e3e42;
             border-radius: 4px;
@@ -1216,6 +1218,8 @@ HTACCESS;
     <script>
         // Translations data
         const translations = $translationsJson;
+        const languages = $languagesJson;
+        const availableLanguages = $availableLanguagesJson;
         
         // Get current language from localStorage or default
         let currentLang = localStorage.getItem('phpdoc_lang') || '{$this->settings['language']}';
@@ -1242,8 +1246,41 @@ HTACCESS;
             currentLang = newLang;
             localStorage.setItem('phpdoc_lang', newLang);
             applyTranslations();
+            updateLanguagePicker();
             toggleLanguagePicker();
         }
+        
+        // Update language picker display
+        function updateLanguagePicker() {
+            const langData = languages[currentLang];
+            if (!langData) return;
+            
+            const current = document.querySelector('.lang-current');
+            if (!current) return;
+            
+            // Update current language display
+            current.innerHTML = langData.flag + 
+                '<span class="lang-name">' + langData.native + '</span>' +
+                '<span class="lang-arrow">▼</span>';
+            
+            // Rebuild dropdown to exclude current language
+            const dropdown = document.getElementById('langDropdown');
+            if (!dropdown) return;
+            
+            let dropdownHTML = '';
+            availableLanguages.forEach(code => {
+                if (code === currentLang) return;
+                if (!languages[code]) return;
+                
+                const lang = languages[code];
+                dropdownHTML += '<div class="lang-option" onclick="changeLang(\'' + code + '\')">' +
+                    lang.flag +
+                    '<span class="lang-name">' + lang.native + '</span>' +
+                    '</div>';
+            });
+            dropdown.innerHTML = dropdownHTML;
+        }
+        
         
         // Toggle language picker dropdown
         function toggleLanguagePicker() {
@@ -1324,13 +1361,14 @@ HTACCESS;
         
         // Apply translations on page load
         applyTranslations();
+        updateLanguagePicker();
     </script>
 </body>
 </html>
 HTML;
+        }
     }
-}
 
-// ===== EXECUTION =====
-$generator = new phpDocGenerator($settings, $translations, $languages);
-$generator->generate();
+    // ===== EXECUTION =====
+    $generator = new phpDocGenerator($settings, $translations, $languages);
+    $generator->generate();

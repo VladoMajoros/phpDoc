@@ -1,4 +1,4 @@
-# phpDoc Generator v0.4.5
+# phpDoc Generator v0.4.7
 
 🚀 **PHP Documentation Generator** - Automatically generates beautiful HTML documentation from PHP files with DocBlock support.
 
@@ -60,11 +60,13 @@ $settings = [
 3. Documentation will be generated automatically in the `output/` subdirectory
 4. View the result at `http://your-domain.com/phpdoc/output/index.html`
 
-**Method B: Using Configuration Interface**
+**Method B: Using Configuration Interface** *(Coming soon - in development)*
 1. Use the web-based configuration tool
 2. Fill in your project settings
 3. Download pre-configured `generator.php`
 4. Upload to your server and open in browser (Method A)
+
+> **Note:** The web-based configuration interface is currently being prepared and will be available in the near future.
 
 ### 3. View Documentation
 
@@ -141,16 +143,17 @@ phpDoc/
 └── output/               # Generated documentation
     ├── index.html       # Main index
     ├── .htaccess        # Apache protection (optional)
+    ├── .htpasswd        # HTTP authentication users (if enabled)
     └── ...              # Generated files
 ```
 
 ## 📝 License
 
-MIT License - feel free to use, modify, and distribute.
+MIT License
 
 ## 👨‍💻 Author
 
-Created with ❤️ for developers who need quick and beautiful PHP documentation.
+Created for developers who need quick and beautiful PHP documentation.
 
 ## 🐛 Issues & Contributions
 
@@ -158,5 +161,5 @@ Found a bug or have a feature request? Feel free to open an issue or submit a pu
 
 ---
 
-**Version:** 0.4.5  
+**Version:** 0.4.7  
 **Last Updated:** October 2025
